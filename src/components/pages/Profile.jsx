@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "../Store/useAuth";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Profile() {
   const { user , token } = useAuth();
@@ -29,7 +30,7 @@ function Profile() {
 
   const handleSaveClick = async () => {
     try {
-       const response = await fetch("http:/localhost:api/user/editprofile" , {
+       const response = await fetch(`${baseUrl}/user/editprofile` , {
           method : "POST",
            headers : {
             Authorization :`Bearer ${token}`

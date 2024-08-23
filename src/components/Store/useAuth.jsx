@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const userverification = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/userverification",
+        `${baseUrl}/auth/userverification`,
         {
           method: "GET",
           headers: {

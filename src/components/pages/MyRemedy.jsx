@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Store/useAuth';
 import { motion } from 'framer-motion';
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function MyRemedy() {
   const { token } = useAuth();
   const [errMsg, setErrMsg] = useState("Loading....");
@@ -9,7 +9,7 @@ function MyRemedy() {
 
   const fetchRemedy = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/myremedy", {
+      const response = await fetch(`${baseUrl}/user/myremedy`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from "../Store/useAuth";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const RemedyForm = () => {
     const { token } = useAuth();
 
@@ -37,7 +37,7 @@ const RemedyForm = () => {
         });
 
         try {
-            const response = await fetch('http://localhost:3000/api/user/create', {
+            const response = await fetch(`${baseUrl}/user/create`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

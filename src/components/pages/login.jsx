@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
 import gsap from "gsap";
+const baseUrl = import.meta.env.VITE_API_BASE_URL; 
 
 const Login = () => {
   const [errMsg, setErrMsg] = useState("");
@@ -36,7 +37,7 @@ const Login = () => {
     setErrMsg(""); // Clear previous error messages
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/login", {
+      const response = await fetch(`${baseUrl}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

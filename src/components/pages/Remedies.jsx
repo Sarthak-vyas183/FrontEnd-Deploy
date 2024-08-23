@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const Remedies = () => {
   const [remedies, setRemedies] = useState([]);
 
@@ -9,7 +9,7 @@ const Remedies = () => {
   useEffect(() => {
     const fetchRemedies = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/auth/remedies");
+        const response = await fetch(`${baseUrl}/auth/remedies`);
         const res = await response.json();
         setRemedies(res.data);
       } catch (error) {

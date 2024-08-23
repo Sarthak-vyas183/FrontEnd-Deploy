@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Store/useAuth'; 
 import { Link } from 'react-router-dom';
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function Users_Requests() {
   const [userRequests, setUserRequests] = useState([]);
   const { token } = useAuth();
 
   const UserRequests = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/doctor/requests", {
+      const response = await fetch(`${baseUrl}/doctor/requests`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -29,7 +29,7 @@ function Users_Requests() {
 
       const requestsWithUserDetails = await Promise.all(
         res.data.map(async (request) => {
-          const userDetailResponse = await fetch(`http://localhost:3000/api/doctor/owner`, {
+          const userDetailResponse = await fetch(`${baseUrl}/doctor/owner`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

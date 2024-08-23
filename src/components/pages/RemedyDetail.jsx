@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function RemedyDetail() {
   const { token } = useAuth();
   const [currRemedy, setCurrRemedy] = useState(null);
@@ -13,7 +13,7 @@ function RemedyDetail() {
 
   const showComments = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/showcomments", {
+      const response = await fetch(`${baseUrl}/auth/showcomments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,7 +28,7 @@ function RemedyDetail() {
 
       const commentsWithUserData = await Promise.all(
         comments.map(async (comment) => {
-          const userResponse = await fetch("http://localhost:3000/api/auth/showcommentuser", {
+          const userResponse = await fetch(`${baseUrl}/auth/showcommentuser`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function RemedyDetail() {
 
   const curr_remedy = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/auth/remedydetail/${id}`);
+      const response = await fetch(`${baseUrl}/auth/remedydetail/${id}`);
       if (!response.ok) {
         throw new Error("Remedy Detail Not Found");
       }
@@ -93,7 +93,7 @@ function RemedyDetail() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/auth/comment", {
+      const response = await fetch(`${baseUrl}/auth/comment`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -117,7 +117,7 @@ function RemedyDetail() {
 
   const bookMarkRemedy = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/bookmark", {
+      const response = await fetch(`${baseUrl}/auth/bookmark`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ function RemedyDetail() {
 
   const bookMarkOrNot = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/bookmarkornot", {
+      const response = await fetch(`${baseUrl}/auth/bookmarkornot`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

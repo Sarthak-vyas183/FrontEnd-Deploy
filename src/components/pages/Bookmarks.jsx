@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/useAuth'; 
+const baseUrl = import.meta.env.VITE_API_BASE_URL; 
 
 function Bookmarks() { 
   const [saved, setSaved] = useState([]);
@@ -9,7 +10,7 @@ function Bookmarks() {
 
   const bookmarks = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/mybookmarks", {
+      const response = await fetch(`${baseUrl}/user/mybookmarks`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -26,7 +27,7 @@ function Bookmarks() {
 
       const remedyDetails = await Promise.all(
         remedyIDs.map(async (ID) => {
-          const remedyResponse = await fetch("http://localhost:3000/api/user/mybookmarksdetail", {
+          const remedyResponse = await fetch(`${baseUrl}/user/mybookmarksdetail`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,

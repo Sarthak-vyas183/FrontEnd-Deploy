@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/useAuth';
+const baseUrl = import.meta.env.VITE_API_BASE_URL; 
 
 function Verify_remedy() {
   const { token } = useAuth();
@@ -8,7 +9,7 @@ function Verify_remedy() {
 
   const unVerifyedRemedy = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/doctor/verify", {
+      const response = await fetch(`${baseUrl}/doctor/verify`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -23,7 +24,7 @@ function Verify_remedy() {
       
       const remediesWithUserDetails = await Promise.all(
         res.data.map(async (remedy) => {
-          const userDetailResponse = await fetch(`http://localhost:3000/api/doctor/owner`, {
+          const userDetailResponse = await fetch(`${baseUrl}/doctor/owner`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json", 
@@ -59,7 +60,7 @@ function Verify_remedy() {
 
   const handleVerify = async (remedyId, userId) => {
     try {
-      const response = await fetch("http://localhost:3000/api/doctor/verified", {
+      const response = await fetch(`${baseUrl}/doctor/verified`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

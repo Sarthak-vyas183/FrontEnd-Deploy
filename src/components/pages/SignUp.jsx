@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Store/useAuth';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function SignUp() {
   const [Errmsg, setErrmsg] = useState("");
   const [user, setUser] = useState({
@@ -29,7 +29,7 @@ function SignUp() {
   const handlesubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/user/signup", {
+      const response = await fetch(`${baseUrl}/user/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

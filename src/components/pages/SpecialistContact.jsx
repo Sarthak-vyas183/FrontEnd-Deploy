@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Store/useAuth';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function ContactDoctorForm() {
   const {token} = useAuth(); 
 
@@ -24,7 +25,7 @@ function ContactDoctorForm() {
 
   const handleVerifyEmail = async () => {
     try {
-     const response = await fetch('http://localhost:3000/api/user/verifyemail', {
+     const response = await fetch(`${baseUrl}/user/verifyemail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ function ContactDoctorForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/api/user/connect_to_dr', {
+      const response = await fetch(`${baseUrl}/user/connect_to_dr`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
