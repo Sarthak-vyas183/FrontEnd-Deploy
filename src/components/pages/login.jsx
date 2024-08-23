@@ -37,7 +37,7 @@ const Login = () => {
     setErrMsg(""); // Clear previous error messages
 
     try {
-      const response = await fetch(`https://homeremedybackenddeploy.onrender.com/api/user/login`, {
+      const response = await fetch("https://homeremedybackenddeploy.onrender.com/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
