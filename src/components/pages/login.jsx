@@ -63,6 +63,7 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       setErrMsg("Login failed. Please check your credentials.");
+      console.log(error)
     }
   };
 
