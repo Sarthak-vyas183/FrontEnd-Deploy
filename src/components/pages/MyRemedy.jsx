@@ -17,6 +17,7 @@ function MyRemedy() {
       });
 
       if (!response.ok) {
+        console.log(response)
         return setErrMsg("Fetch Failed: Backend Server Error");
       }
 

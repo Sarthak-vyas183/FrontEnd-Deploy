@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
+
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function RemedyDetail() {
   const { token } = useAuth();
@@ -45,7 +47,7 @@ function RemedyDetail() {
           };
         })
       );
-
+     
       setCommentOnRemedy(commentsWithUserData);
       console.log(saved)
     } catch (error) {
@@ -103,11 +105,12 @@ function RemedyDetail() {
       });
 
       if (!response.ok) {
+        alert("Failed to post : Please Login")
         throw new Error("Failed to post comment");
       }
 
       const data = await response.json();
-      console.log(data);
+      alert("Comment Post");
       setComment("");
       showComments();
     } catch (error) {
@@ -134,7 +137,12 @@ function RemedyDetail() {
       } else if (response.status === 200) {
         console.log(response.status)
         setRemedySaved(true);
-      } 
+        alert("Saved")
+      } else if(response.status === 401) {
+         alert("Please login to Save ")
+      } else {
+         alert("Not an authorized user")
+      }
 
       
        
@@ -160,6 +168,7 @@ function RemedyDetail() {
         setRemedySaved(true);
       } else if (response.status === 200) {
         setRemedySaved(false);
+        alert("unsaved")
       } 
 
       if (!response.ok) {
@@ -177,12 +186,14 @@ function RemedyDetail() {
     }
   }, [id, token]);
   
+  const [ownerDetailshow , setOwnerDetailshow] = useState("hidden")
+ 
   
 
   if (!currRemedy) {
     return (
-      <div className="w-[100vw] h-[90vh] relative top-[10vh]">
-        <p>Loading...</p>
+      <div className="w-[100vw] h-[90vh] relative top-[10vh] flex justify-center items-center">
+        <p className="text-3xl font-semibold">Loading...</p>
       </div>
     );
   }
@@ -199,123 +210,164 @@ function RemedyDetail() {
         }
       `}</style>
 
-      <div className="w-[100vw] h-[90vh] top-[10vh] flex overflow-x-hidden">
-        <div className="fixed w-[20%] h-full left-0 top-[10vh] border-r border-black">
-          <div className="w-full h-48 px-2">
-            <div className="w-full h-12 flex justify-start items-center gap-2 border-y px-2 border-black">
+<div className="w-[100vw] h-[90vh] top-[10vh] flex flex-row max-sm:flex-col overflow-x-hidden">
+
+  <div className="fixed w-[20%] h-full max-sm:hidden left-0 top-[10vh] border-r border-black">
+    <div className="w-full h-48 px-2">
+      <div className="w-full h-12 flex justify-start items-center gap-2 border-y px-2 border-black">
+        <img
+          className="w-8 h-8 rounded-full"
+          src="../../../images/user.png"
+          alt=""
+        />
+        <p>{owner.fullname}</p>
+      </div>
+      <div className="flex gap-4">
+        <span>Email :</span>
+        <span>{owner.email}</span>
+      </div>
+      <div className="flex gap-4">
+        <span>Phone :</span>
+        <span>{owner.ph_no}</span>
+      </div>
+      <div className="flex gap-4">
+        <span>Status :</span>
+        <span>{owner.isDoctor ? "Doctor" : "User"}</span>
+      </div>
+      <div className="flex justify-start mt-2">
+        <button className="p-1 text-white bg-blue-700 rounded-md">
+          Connect
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+<div className="w-[50%] h-full ml-[20%] mr-[30%] max-sm:ml-0 max-sm:w-full p-8 max-sm:p-3 pb-28 max-sm:pb-2 fixed max-sm:relative top-[10vh] overflow-y-scroll custom-scrollbar">
+     
+    <div className="p-2 img w-[100%] h-auto flex flex-col items-center justify-center">
+     <div className="flex w-full justify-between px-4">
+      <i onClick={bookMarkRemedy} className={`ri-bookmark-${RemedySaved ? "fill" : "line"} ml-96 max-sm:ml-0`}>
+        {RemedySaved ? "Saved" : "Save"}
+      </i> 
+      
+      </div>
+      <img
+        className="w-[80%] h-full rounded-md"
+        src={getImageSrc(currRemedy.image)}
+        alt=""
+      />
+      <p className="opacity-70 underline cursor-pointer">Posted by : {owner.fullname}</p>
+    </div> 
+
+    <div className="title_desc">
+      <h1 className="font-medium">
+        <span className="font-semibold text-2xl">Title : </span>
+        {currRemedy.title}
+      </h1>
+      <br />
+      <p className="leading-tight">
+        <span className="font-semibold text-2xl">Description : <br /></span>
+        {currRemedy.description}
+      </p>
+      <br />
+    </div>
+    <div className="stepsAndIngredient">
+      <span>
+        <p className="font-semibold text-2xl">Ingredients : </p>
+        {currRemedy.ingredients}
+      </span>
+      <br />
+      <br />
+      <span>
+        <p className="font-semibold text-2xl">Steps :</p>
+        {currRemedy.steps}
+      </span>
+      <br />
+    </div>
+    <br />
+
+    <form
+      onSubmit={handleSubmit}
+      className="w-full flex justify-evenly items-center h-16"
+    >
+      <input
+        className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2"
+        type="text"
+        placeholder="Comment here..."
+        onChange={handleInput}
+        value={comment}
+      />
+      <button
+        type="submit"
+        className="py-1 px-6 bg-blue-600 rounded-md text-white"
+      >
+        Post
+      </button>
+    </form> 
+
+    <div className="hidden max-sm:flex flex-col">
+    <h1>Comments :</h1> <br />
+    <section className="flex flex-col gap-8 mb-[15vh]">
+      {commentOnRemedy && commentOnRemedy.length > 0 ? (
+        commentOnRemedy.map((comment, index) => (
+          <div key={index} className="w-full h-auto border-y border-black">
+            <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
               <img
                 className="w-8 h-8 rounded-full"
                 src="../../../images/user.png"
                 alt=""
               />
-              <p>{owner.fullname}</p>
-            </div>
-            <div className="flex gap-4">
-              <span>Email :</span>
-              <span>{owner.email}</span>
-            </div>
-            <div className="flex gap-4">
-              <span>Phone :</span>
-              <span>{owner.ph_no}</span>
-            </div>
-            <div className="flex gap-4">
-              <span>Status :</span>
-              <span>{owner.isDoctor ? "Doctor" : "User"}</span>
-            </div>
-            <div className="flex justify-start mt-2">
-              <button className="p-1 text-white bg-blue-700 rounded-md">
-                Connect
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-[50%] h-full ml-[20%] mr-[30%] p-8 pb-28 fixed top-[10vh] overflow-y-scroll custom-scrollbar">
-          <div className="p-4 img w-[100%] h-auto flex flex-col items-center justify-center">
-            <i onClick={bookMarkRemedy} className={`ri-bookmark-${RemedySaved ? "fill" : "line"} ml-96`}>
-              {RemedySaved ? "Saved" : "Save"}
-            </i>
-            <img
-              className="w-[80%] h-full rounded-md"
-              src={getImageSrc(currRemedy.image)}
-              alt=""
-            />
-          </div>
-          <div className="title_desc">
-            <h1 className="font-medium">
-              <span className="font-semibold text-2xl">Title : </span>
-              {currRemedy.title}
-            </h1>{" "}
-            <br />
-            <p className="leading-tight">
-              <span className="font-semibold text-2xl">Description : <br /></span>
-              {currRemedy.description}
-            </p>{" "}
-            <br />
-          </div>
-          <div className="stepsAndIngredient">
-            <span>
-              <p className="font-semibold text-2xl">Ingredients : </p>
-              {currRemedy.ingredients}
+              <p className="flex">
+                <span className="text-green-600">
+                  {comment.commenter?.isDoctor ? "Dr." : ""}
+                </span>
+                {comment.commenter?.fullname || "Unknown User"}
+              </p>
             </span>
-            <br />
-            <br />
-            <span>
-              <p className="font-semibold text-2xl">Steps :</p>
-              {currRemedy.steps}
-            </span>{" "}
-            <br />
-          </div>{" "}
-          <br />
+            <p>{comment.comment}</p>
+          </div>
+        ))
+      ) : (
+        <p>No comments yet</p>
+      )}
+    </section>
+    </div>  
 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full flex justify-evenly items-center h-16"
-          >
-            <input
-              className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2"
-              type="text"
-              placeholder="Comment here..."
-              onChange={handleInput}
-              value={comment}
-            />
-            <button
-              type="submit"
-              className="py-1 px-6 bg-blue-600 rounded-md text-white"
-            >
-              Post
-            </button>
-          </form>
-        </div>
+  </div>
 
-        <div className="fixed w-[30%] h-full right-0 top-[10vh] overflow-y-scroll pr-2 custom-scrollbar">
-          <h1>Comments :</h1> <br />
-          <section className="flex flex-col gap-8 mb-[15vh]">
-            {commentOnRemedy && commentOnRemedy.length > 0 ? (
-              commentOnRemedy.map((comment, index) => (
-                <div key={index} className="w-full h-auto border-y border-black">
-                  <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
-                    <img
-                      className="w-8 h-8 rounded-full"
-                      src="../../../images/user.png"
-                      alt=""
-                    />
-                    <p className="flex">
-                      <span className="text-green-600">
-                        {comment.commenter?.isDoctor ? "Dr." : ""}
-                      </span>
-                      {comment.commenter?.fullname || "Unknown User"}
-                    </p>
-                  </span>
-                  <p>{comment.comment}</p>
-                </div>
-              ))
-            ) : (
-              <p>No comments yet</p>
-            )}
-          </section>
-        </div>
-      </div>
+ 
+  <div className="fixed w-[30%] max-sm:hidden h-full right-0 top-[10vh] max-sm:top-0  overflow-y-scroll pr-2 custom-scrollbar">
+    <h1>Comments :</h1> <br />
+    <section className="flex flex-col gap-8 mb-[15vh]">
+      {commentOnRemedy && commentOnRemedy.length > 0 ? (
+        commentOnRemedy.map((comment, index) => (
+          <div key={index} className="w-full h-auto border-y border-black">
+            <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
+              <img
+                className="w-8 h-8 rounded-full"
+                src="../../../images/user.png"
+                alt=""
+              />
+              <p className="flex">
+                <span className="text-green-600">
+                  {comment.commenter?.isDoctor ? "Dr." : ""}
+                </span>
+                {comment.commenter?.fullname || "Unknown User"}
+              </p>
+            </span>
+            <p>{comment.comment}</p>
+          </div>
+        ))
+      ) : (
+        <p>No comments yet</p>
+      )}
+    </section>
+  </div> 
+
+</div>
+
+
     </>
   );
 }
