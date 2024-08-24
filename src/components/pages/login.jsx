@@ -50,6 +50,7 @@ const Login = () => {
       if (!response.ok) {
         const errorMessage =
           data.msg?.issues?.[0]?.message || data.msg || "Login failed.";
+          console.log(response);
         setErrMsg(errorMessage);
         return;
       }
