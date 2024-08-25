@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Store/useAuth';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 function ContactDoctorForm() {
-  const {token} = useAuth(); 
+  const { token } = useAuth();
 
   const [formData, setFormData] = useState({
     doctorEmail: '',
     queryType: '',
     reqDescription: '',
     emailVerified: false,
-  }); 
+  });
 
-   // replace with actual token management
   const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [verificationMessage, setVerificationMessage] = useState(''); 
+  const [verificationMessage, setVerificationMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +25,7 @@ function ContactDoctorForm() {
 
   const handleVerifyEmail = async () => {
     try {
-     const response = await fetch(`${baseUrl}/user/verifyemail`, {
+      const response = await fetch(`${baseUrl}/user/verifyemail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,84 +75,86 @@ function ContactDoctorForm() {
   };
 
   return (
-    <div className='w-[80vw] h-[90vh] pt-4'>
-        <div className='w-full max-w-md mx-auto p-6 bg-white shadow-md rounded-lg'>
-      <h2 className='text-2xl font-bold mb-6 text-center'>Contact Doctor</h2>
-      <form onSubmit={handleSubmit}>
-        <div className='mb-4'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='doctorEmail'>
-            Doctor's Email
-          </label>
-          <div className='flex'>
-            <input
-              type='email'
-              id='doctorEmail'
-              name='doctorEmail'
-              value={formData.doctorEmail}
+    <div className='w-full max-w-md mx-auto p-4 sm:p-6 lg:p-8'>
+      <div className='w-full bg-white shadow-md rounded-lg'>
+        <h2 className='text-2xl font-bold mb-6 text-center px-4 sm:px-6 lg:px-8 pt-4'>
+          Contact Doctor
+        </h2>
+        <form onSubmit={handleSubmit} className='p-4 sm:p-6 lg:p-8'>
+          <div className='mb-4'>
+            <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='doctorEmail'>
+              Doctor's Email
+            </label>
+            <div className='flex flex-col sm:flex-row'>
+              <input
+                type='email'
+                id='doctorEmail'
+                name='doctorEmail'
+                value={formData.doctorEmail}
+                onChange={handleChange}
+                placeholder='Enter doctor email'
+                className='w-full sm:w-auto px-3 py-2 border rounded-l-lg text-gray-700 focus:outline-none focus:border-blue-500'
+                required
+              />
+              <button
+                type='button'
+                onClick={handleVerifyEmail}
+                className='bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors'
+              >
+                Verify
+              </button>
+            </div>
+            {verificationMessage && (
+              <p className={`text-sm mt-2 ${formData.emailVerified ? 'text-green-600' : 'text-red-600'}`}>
+                {verificationMessage}
+              </p>
+            )}
+          </div>
+          <div className='mb-4'>
+            <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='queryType'>
+              Query is About
+            </label>
+            <select
+              id='queryType'
+              name='queryType'
+              value={formData.queryType}
               onChange={handleChange}
-              placeholder='Enter doctor email'
-              className='w-full px-3 py-2 border rounded-l-lg text-gray-700 focus:outline-none focus:border-blue-500'
+              className='w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500'
               required
-            />
-            <button
-              type='button'
-              onClick={handleVerifyEmail}
-              className='bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors'
             >
-              Verify
+              <option value=''>Select a query type</option>
+              <option value='Verify My Remedy'>Verify My Remedy</option>
+              <option value='Suggest Pros and Cons'>Suggest Pros and Cons on My Remedy</option>
+              <option value='Disagree with My Remedy'>Why You Disagree with My Remedy</option>
+            </select>
+          </div>
+          <div className='mb-4'>
+            <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='reqDescription'>
+              Description of Remedy
+            </label>
+            <textarea
+              id='reqDescription'
+              name='reqDescription'
+              value={formData.reqDescription}
+              onChange={handleChange}
+              placeholder='Provide a detailed description of your remedy'
+              className='w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500 h-32'
+              required
+            ></textarea>
+          </div>
+          <div className='text-center'>
+            <button
+              type='submit'
+              className={`bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors ${
+                submitDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+              }`}
+              disabled={submitDisabled}
+            >
+              Submit
             </button>
           </div>
-          {verificationMessage && (
-            <p className={`text-sm mt-2 ${formData.emailVerified ? 'text-green-600' : 'text-red-600'}`}>
-              {verificationMessage}
-            </p>
-          )}
-        </div>
-        <div className='mb-4'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='queryType'>
-            Query is About
-          </label>
-          <select
-            id='queryType'
-            name='queryType'
-            value={formData.queryType}
-            onChange={handleChange}
-            className='w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500'
-            required
-          >
-            <option value=''>Select a query type</option>
-            <option value='Verify My Remedy'>Verify My Remedy</option>
-            <option value='Suggest Pros and Cons'>Suggest Pros and Cons on My Remedy</option>
-            <option value='Disagree with My Remedy'>Why You Disagree with My Remedy</option>
-          </select>
-        </div>
-        <div className='mb-4'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='reqDescription'>
-            Description of Remedy
-          </label>
-          <textarea
-            id='reqDescription'
-            name='reqDescription'
-            value={formData.reqDescription}
-            onChange={handleChange}
-            placeholder='Provide a detailed description of your remedy'
-            className='w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500 h-32'
-            required
-          ></textarea>
-        </div>
-        <div className='text-center'>
-          <button
-            type='submit'
-            className={`bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors ${
-              submitDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
-            }`}
-            disabled={submitDisabled}
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
     </div>
   );
 }

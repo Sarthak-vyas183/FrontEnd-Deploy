@@ -68,7 +68,7 @@ function Bookmarks() {
   };
 
   return (
-    <div className='w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden px-4 py-8'>
+    <div className='w-full sm:w-[90vw] lg:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden px-4 max-sm:pb-20 py-8'>
       <h1 className='text-2xl font-bold mb-4'>Saved Remedies</h1>
       {loading ? (
         <div className='flex justify-center items-center h-full'>
@@ -95,7 +95,7 @@ function Bookmarks() {
           <div className='w-full h-full'>
             <h1 className='w-full h-[5%] px-2'>No Remedy found</h1>
             <div className='w-full h-[95%] flex justify-center items-center'>
-            <img src="../../../images/Notfound.png" alt="" />
+              <img src="../../../images/Notfound.png" alt="Not Found" className='w-full h-full object-contain' />
             </div>
          </div>          )}
         </div>

@@ -46,7 +46,7 @@ function Profile() {
   };
 
   return (
-    <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 bg-gray-100">
+    <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 max-sm:pb-20 bg-gray-100">
     <div className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center justify-between mb-8">
       <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-0">
         <img className="w-20 h-20 md:w-24 md:h-24 rounded-full" src={profileImg} alt="Profile" />

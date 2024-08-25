@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from "../Store/useAuth";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 const RemedyForm = () => {
     const { token } = useAuth();
 
@@ -64,9 +65,9 @@ const RemedyForm = () => {
     };
 
     return ( 
-        <div className='w-[80vw] h-[90vh] bg-gray-200 text-black flex justify-center py-4'>
-            <div className="w-[50vw] h-[100%] overflow-y-scroll overflow-x-hidden mb-4">
-                <h2 className="text-2xl font-bold mb-4">Submit a Remedy</h2>
+        <div className='w-[90vw] max-w-[1200px] h-[90vh] bg-gray-200 text-black flex justify-center py-4 max-sm:mb-4  mx-auto'>
+            <div className="w-full md:w-[70vw] lg:w-[50vw] h-[100%] overflow-y-scroll overflow-x-hidden mb-4 max-sm:pb-14 px-4">
+                <h2 className="text-2xl font-bold mb-4 text-center">Submit a Remedy</h2>
                 <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Title</label>

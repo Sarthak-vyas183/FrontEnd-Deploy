@@ -69,7 +69,7 @@ function Nav() {
 
   return (
     <div>
-      <div className="w-[100vw] h-[10vh] bg-gray-800 bg-opacity-60 fixed pr-2 z-10">
+      <div className="w-[100vw] h-[10vh] bg-gray-800 bg-opacity-60 fixed  z-10">
         <div
           className={`Navigation h-full flex justify-between items-center ${navTextColor} font-semibold text-2xl px-4`}
         >
