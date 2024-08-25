@@ -36,10 +36,12 @@ function Nav() {
   const { isLoggedin, user } = useAuth();
 
   const navTextColor =
-    location.pathname === "/remedies" ||
-    location.pathname.includes("/remedies/")
-      ? "text-white bg-gray-800"
-      : "text-white bg-transparent";
+  location.pathname === "/remedies" || location.pathname.includes("/remedies/")
+  ? "text-white bg-gray-800"
+  : location.pathname === "/"
+  ? "text-white bg-transparent"
+  : "text-white bg-[#1F2937]";
+
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
