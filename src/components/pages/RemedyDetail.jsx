@@ -12,6 +12,7 @@ function RemedyDetail() {
   const [comment, setComment] = useState("");
   const [commentOnRemedy, setCommentOnRemedy] = useState([]);
   const [RemedySaved, setRemedySaved] = useState(null);
+  const [defaultimg , setdetaultimg] = useState('../../../images/user.png');
 
   const showComments = async () => {
     try {
@@ -217,7 +218,7 @@ function RemedyDetail() {
       <div className="w-full h-12 flex justify-start items-center gap-2 border-y px-2 border-black">
         <img
           className="w-8 h-8 rounded-full"
-          src="../../../images/user.png"
+          src={getImageSrc(owner.profileimg) || defaultimg}
           alt=""
         />
         <p>{owner.fullname}</p>
@@ -334,7 +335,7 @@ function RemedyDetail() {
     </section>
     </div>  
 
-  </div>
+</div>
 
  
   <div className="fixed w-[30%] max-sm:hidden h-full right-0 top-[10vh] max-sm:top-0  overflow-y-scroll pr-2 custom-scrollbar">
@@ -346,7 +347,7 @@ function RemedyDetail() {
             <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
               <img
                 className="w-8 h-8 rounded-full"
-                src="../../../images/user.png"
+                src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
                 alt=""
               />
               <p className="flex">
