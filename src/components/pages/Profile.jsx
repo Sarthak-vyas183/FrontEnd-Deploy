@@ -117,7 +117,7 @@ function Profile() {
   };
 
   return (
-    <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 max-sm:pb-20 bg-gray-100">
+    <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 max-sm:pb-32 bg-gray-100">
       <div className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center justify-center md:justify-between mb-8">
         <div className="flex flex-col items-center gap-4 mb-4 md:mb-0 md:flex-row md:items-center md:gap-6">
           <div className="flex flex-col items-center">
