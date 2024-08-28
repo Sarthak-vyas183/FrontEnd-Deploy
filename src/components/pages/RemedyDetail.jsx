@@ -23,12 +23,12 @@ function RemedyDetail() {
         },
         body: JSON.stringify({ RemedyId: id }),
       });
-
+  
       if (!response.ok) throw new Error("Internal server error!");
-
+  
       const res = await response.json();
       const comments = res.data || [];
-
+  
       const commentsWithUserData = await Promise.all(
         comments.map(async (comment) => {
           const userResponse = await fetch(`${baseUrl}/auth/showcommentuser`, {
@@ -38,9 +38,9 @@ function RemedyDetail() {
             },
             body: JSON.stringify({ user: comment.userId }),
           });
-
+  
           if (!userResponse.ok) throw new Error("Failed to fetch user data");
-
+  
           const userData = await userResponse.json();
           return {
             ...comment,
@@ -48,13 +48,17 @@ function RemedyDetail() {
           };
         })
       );
-     
+  
+      // Sort comments by createdAt in descending order
+      commentsWithUserData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
       setCommentOnRemedy(commentsWithUserData);
-      console.log(saved)
     } catch (error) {
       console.log(error);
     }
   };
+  
+  
 
   useEffect(() => {
     showComments();
@@ -133,10 +137,10 @@ function RemedyDetail() {
     
 
       if (response.status === 403) {
-        console.log(response.status)
+       
         setRemedySaved(false);
       } else if (response.status === 200) {
-        console.log(response.status)
+        
         setRemedySaved(true);
         alert("Saved")
       } else if(response.status === 401) {
@@ -163,13 +167,11 @@ function RemedyDetail() {
         body: JSON.stringify({ RemedyId: id }),
       });
 
-     
-
       if (response.status === 403) {
         setRemedySaved(true);
       } else if (response.status === 200) {
         setRemedySaved(false);
-        alert("unsaved")
+       
       } 
 
       if (!response.ok) {
@@ -316,7 +318,7 @@ function RemedyDetail() {
             <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
               <img
                 className="w-8 h-8 rounded-full"
-                src="../../../images/user.png"
+                src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
                 alt=""
               />
               <p className="flex">
@@ -325,6 +327,7 @@ function RemedyDetail() {
                 </span>
                 {comment.commenter?.fullname || "Unknown User"}
               </p>
+              <p className="text-xs text-gray-500">  {new Date(comment.createdAt).toLocaleDateString()}</p>
             </span>
             <p>{comment.comment}</p>
           </div>
@@ -335,35 +338,39 @@ function RemedyDetail() {
     </section>
     </div>  
 
-</div>
+</div> 
 
  
   <div className="fixed w-[30%] max-sm:hidden h-full right-0 top-[10vh] max-sm:top-0  overflow-y-scroll pr-2 custom-scrollbar">
     <h1>Comments :</h1> <br />
     <section className="flex flex-col gap-8 mb-[15vh]">
-      {commentOnRemedy && commentOnRemedy.length > 0 ? (
-        commentOnRemedy.map((comment, index) => (
-          <div key={index} className="w-full h-auto border-y border-black">
-            <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
-              <img
-                className="w-8 h-8 rounded-full"
-                src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
-                alt=""
-              />
-              <p className="flex">
-                <span className="text-green-600">
-                  {comment.commenter?.isDoctor ? "Dr." : ""}
-                </span>
-                {comment.commenter?.fullname || "Unknown User"}
-              </p>
-            </span>
-            <p>{comment.comment}</p>
+  {commentOnRemedy && commentOnRemedy.length > 0 ? (
+    commentOnRemedy.map((comment, index) => (
+      <div key={index} className="w-full h-auto border-y border-black">
+        <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
+          <img
+            className="w-8 h-8 rounded-full"
+            src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
+            alt=""
+          />
+          <div className="flex flex-col">
+            <p className="flex">
+              <span className="text-green-600">
+                {comment.commenter?.isDoctor ? "Dr." : ""}
+              </span>
+              {comment.commenter?.fullname || "Unknown User"}
+            </p>
+            <p className="text-xs text-gray-500">  {new Date(comment.createdAt).toLocaleDateString()}</p>
           </div>
-        ))
-      ) : (
-        <p>No comments yet</p>
-      )}
-    </section>
+        </span>
+        <p>{comment.comment}</p>
+      </div>
+    ))
+  ) : (
+    <p>No comments yet</p>
+  )}
+</section>
+
   </div> 
 
 </div>

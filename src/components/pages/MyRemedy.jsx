@@ -47,15 +47,16 @@ function MyRemedy() {
   }, [token]);
 
   return (
-    <div className='w-[90vw] md:w-[80vw] h-auto flex flex-wrap justify-center overflow-y-scroll overflow-x-hidden'>
+    <div className='w-[full]  h-auto flex flex-wrap justify-center overflow-y-scroll overflow-x-hidden'>
       {remedies.length > 0 ? (
         remedies.map((element, idx) => (
           <motion.div
             key={idx}
-            className="w-full sm:w-[47%] lg:w-[30%] xl:w-[23%] rounded overflow-hidden shadow-lg bg-white m-2 p-4"
+            className="w-[40%] max-sm:w-full max-sm:pb-4  rounded overflow-hidden shadow-lg bg-white m-2 p-4"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
-          > 
+          >  
+
             <div
               className="w-full h-48 bg-cover bg-center flex justify-end p-2"
               style={{ backgroundImage: `url(${getImageSrc(element.image)})` }}>

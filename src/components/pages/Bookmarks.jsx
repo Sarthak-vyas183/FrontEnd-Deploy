@@ -71,9 +71,8 @@ function Bookmarks() {
     <div className='w-full sm:w-[90vw] lg:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden px-4 max-sm:pb-20 py-8'>
       <h1 className='text-2xl font-bold mb-4'>Saved Remedies</h1>
       {loading ? (
-        <div className='flex justify-center items-center h-full'>
-          <p className='text-lg text-gray-100'>Loading...</p> {/* Loading message */}
-        </div>
+        <p className='w-full h-auto  flex justify-center items-center'><img className='w-[10%] h-auto' src="../images/loadingIcon.gif" alt="" /></p>
+
       ) : (
         <div id="container" className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
           {saved.length > 0 ? (

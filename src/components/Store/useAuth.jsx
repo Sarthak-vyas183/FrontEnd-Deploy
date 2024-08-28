@@ -42,6 +42,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
   useEffect(() => {
     if (token) {
       userverification();
@@ -50,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedin, storeTokenInLs, token, LogoutUser }}
+      value={{ user, isLoggedin, storeTokenInLs, token, LogoutUser , updateUser }}
     >
       {children}
     </AuthContext.Provider>

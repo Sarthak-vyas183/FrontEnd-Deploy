@@ -66,6 +66,15 @@ function ContactDoctorForm() {
 
       if (response.status === 200) {
         alert('Request submitted successfully!');
+        // Clear the form after successful submission
+        setFormData({
+          doctorEmail: '',
+          queryType: '',
+          reqDescription: '',
+          emailVerified: false,
+        });
+        setVerificationMessage(''); // Clear the verification message
+        setSubmitDisabled(true); // Disable the submit button
       } else {
         alert('Failed to submit request.');
       }
@@ -95,14 +104,17 @@ function ContactDoctorForm() {
                 placeholder='Enter doctor email'
                 className='w-full sm:w-auto px-3 py-2 border rounded-l-lg text-gray-700 focus:outline-none focus:border-blue-500'
                 required
+                disabled={formData.emailVerified} // Lock the email field after verification
               />
-              <button
-                type='button'
-                onClick={handleVerifyEmail}
-                className='bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors'
-              >
-                Verify
-              </button>
+              {!formData.emailVerified && (
+                <button
+                  type='button'
+                  onClick={handleVerifyEmail}
+                  className='bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors'
+                >
+                  Verify
+                </button>
+              )}
             </div>
             {verificationMessage && (
               <p className={`text-sm mt-2 ${formData.emailVerified ? 'text-green-600' : 'text-red-600'}`}>

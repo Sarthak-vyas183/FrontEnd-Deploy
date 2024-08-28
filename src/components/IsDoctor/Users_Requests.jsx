@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../Store/useAuth'; 
+import { useAuth } from '../Store/useAuth';
 import { Link } from 'react-router-dom';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 function Users_Requests() {
   const [userRequests, setUserRequests] = useState([]);
+  const [loading, setLoading] = useState(true); // Fix state declaration
   const { token } = useAuth();
 
   const UserRequests = async () => {
@@ -51,6 +53,8 @@ function Users_Requests() {
       setUserRequests(requestsWithUserDetails);
     } catch (error) {
       console.error("Internal server error:", error);
+    } finally {
+      setLoading(false); // Ensure loading state is updated
     }
   };
 
@@ -59,14 +63,14 @@ function Users_Requests() {
       UserRequests();
     }
   }, [token]);
+
   return (
     <div>
-       {userRequests.length > 0 ? (
-        userRequests.map((request , idx) => (
+      {loading ? (
+        <p className='w-full h-[90vh]  flex justify-center items-center'><img className='w-[10%] h-auto' src="../images/loadingIcon.gif" alt="" /></p>
+      ) : userRequests.length > 0 ? (
+        userRequests.map((request, idx) => (
           <div key={idx} className='bg-white p-4 mb-4 shadow-lg rounded-lg flex'>
-           
-
-            {/* Content Section */}
             <div className='w-2/3 p-4'>
               <h3 className='text-xl font-bold mb-2'>{request.queryType}</h3>
               <p className='text-gray-700 mb-2'>{request.reqDescription}</p>
@@ -75,13 +79,13 @@ function Users_Requests() {
               </p>
               <div className='flex justify-between items-center'>
                 <Link to={`/viewuser/${request.userDetail._id}`} className='text-blue-500 hover:underline'>
-                  View User Analystics
+                  View User Analytics
                 </Link>
                 <button
                   onClick={() => handleIgnore(request._id)}
                   className='bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600'
                 >
-                 Ignore
+                  Ignore
                 </button>
               </div>
             </div>
@@ -91,7 +95,7 @@ function Users_Requests() {
         <p>No user requests available.</p>
       )}
     </div>
-
-);
+  );
 }
+
 export default Users_Requests;
