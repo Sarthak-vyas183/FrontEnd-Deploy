@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "../Store/useAuth";
+import { useNavigate } from 'react-router-dom';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Profile() {
   const { user, token } = useAuth();
+  const navigate = useNavigate();
   const [profileImg, setProfileImg] = useState();
   const [defaultProfileImg, setDefaultProfileImg] = useState("../../../images/user.png"); 
 
@@ -51,6 +53,7 @@ function Profile() {
 
       alert("Profile Updated");
       setIsEditing(false);
+      navigate("/");
     } catch (error) {
       alert("Error: Unable to save profile. Try again later.");
       console.error(error);
@@ -98,6 +101,7 @@ function Profile() {
       }
   
       alert("Profile Image Updated");
+      navigate("/");
       setProfileImageFile(null); 
     } catch (error) {
       alert("Error: Unable to update profile. Try again later.");
@@ -130,6 +134,7 @@ function Profile() {
       }
 
       alert("Account deleted successfully.");
+      navigate("/")
       // Implement redirect or further actions after account deletion
     } catch (error) {
       alert("Error: Unable to delete account. Please check your password and try again.");
