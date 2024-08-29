@@ -67,6 +67,16 @@ function Nav() {
     }
   }, [isSidebarOpen]);
 
+  const getImageSrc = (buffer) => {
+    if (!buffer) return "";
+    const binary = new Uint8Array(buffer.data).reduce(
+      (acc, byte) => acc + String.fromCharCode(byte),
+      ""
+    );
+    const base64String = window.btoa(binary);
+    return `data:image/jpeg;base64,${base64String}`;
+  };
+
   return (
     <div>
       <div className="w-[100vw] h-[10vh] bg-gray-800 bg-opacity-60 fixed  z-10">
@@ -162,11 +172,11 @@ function Nav() {
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <img
-              src="https://via.placeholder.com/40"
+              src={`${getImageSrc(user && user.image)} || ../../../images/user.png`}
               alt="Profile Image"
               className="w-10 h-10 rounded-full"
             />
-            <span className="text-lg font-semibold">Sarthak</span>
+            <span className="text-lg font-semibold">{user && user.fullname || "Guest"}</span>
           </div>
           <button className="focus:outline-none" onClick={toggleSidebar}>
             <svg
