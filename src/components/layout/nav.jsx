@@ -80,7 +80,7 @@ function Nav() {
                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
                 alt="Logo"
               />
-              <p>HomeRemedy.in</p>
+              <p>HomeRemedies</p>
             </h1>
           </div>
 
