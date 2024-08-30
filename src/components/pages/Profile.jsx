@@ -357,7 +357,7 @@ function Profile() {
 
       {isEditing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full h-[95vh] mt-10 overflow-y-auto max-w-md">
             <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
             <div className="mb-4">
               <label className="block text-gray-700">Full Name</label>
