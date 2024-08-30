@@ -469,7 +469,7 @@ function Profile() {
             <h2 className="text-2xl font-bold mb-4 text-blue-600">
               Verify Yourself
             </h2>
-            <p className="text-gray-600 mb-4">Please Detail to confirm.</p>
+            <p className="text-gray-600 mb-4">Please Enter Certificate No. and Upload Certificate</p>
             <input
               type="text"
               value={RMP_NO}
