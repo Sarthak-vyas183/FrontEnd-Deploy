@@ -20,6 +20,7 @@ import IsDoctor from "../IsDoctor/IsDoctor";
 import Users_Requests from "../IsDoctor/Users_Requests";
 import Verify_Remedy from '../IsDoctor/Verify_remedy';
 import RemedyDetail from '../pages/RemedyDetail';
+import VerificationReq from '../Admin/verificationReq';
 
 
 function Router() {
@@ -53,7 +54,7 @@ function Router() {
              <Route path='bookmarks' element={<Bookmarks/>} />
              <Route path='usermanagement' element={<Usermanagement/>} />
              <Route path='remedymanagement' element={<RemedyManagement/>} />
-
+             <Route path='verifyReq' element={<VerificationReq/>} />
         </Route> 
 
         <Route path='/doctor' element={<IsDoctor/>}>
@@ -62,7 +63,7 @@ function Router() {
              <Route path='myremedy' element={<MyRemedy/>} />
              <Route path='requests' element={<Users_Requests/>} />
              <Route path='verifyremedy' element={<Verify_Remedy/>} />
-             <Route path='bookmarks' element={<Bookmarks/>}></Route>
+             <Route path='bookmarks' element={<Bookmarks/>} />
         </Route> 
        
   
