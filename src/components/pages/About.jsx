@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import  profile from "../../assets/profile.jpg"
 gsap.registerPlugin(ScrollTrigger);
 
 function About() {
@@ -91,7 +92,7 @@ function About() {
           <div className="flex flex-col items-center founder">
             <img
               className="rounded-md w-40 h-40"
-              src="https://media.licdn.com/dms/image/D5603AQH5rgrXmYTRVg/profile-displayphoto-shrink_400_400/0/1712716429252?e=1729123200&v=beta&t=uwQl6pYY-P0X_WAgbaT61nWhYlf5unJPBeeJX5OJFW8"
+              src={profile}
               alt="Sarthak Vyas"
             />
             <p className="font-semibold underline mt-2">
@@ -100,39 +101,7 @@ function About() {
               </a>
             </p>
             <p className="text-center">
-              Co-founder and Chairman of HomeRemedy.org
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center founder">
-            <img
-              className="rounded-md w-40 h-40"
-              src="https://media.licdn.com/dms/image/v2/D5603AQFWEEvRQA2O-A/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718255276985?e=1729123200&v=beta&t=JuXd2Gq_1QXN5ZKRlQ3xsuNLMDPqMK6S0W3tTxEUh2Q"
-              alt="Shivani Barya"
-            />
-            <p className="font-semibold underline mt-2">
-              <a href="https://www.linkedin.com/in/shivani-barya-/">
-                Shivani Barya
-              </a>
-            </p>
-            <p className="text-center">
-              HomeRemedy.in Co-founder and Chief Strategy Officer
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center founder">
-            <img
-              className="rounded-md w-40 h-40"
-              src="https://media.licdn.com/dms/image/v2/D4D03AQFMNcwbML1I5A/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1723357631817?e=1729123200&v=beta&t=L9GTWtMDpkBLcoIwClHRWiKfwoiTXa1h55oAcuiQ_go"
-              alt="Yash Sharma"
-            />
-            <p className="font-semibold underline mt-2">
-              <a href="https://www.linkedin.com/in/yash-sharma-357064224/">
-                Yash Sharma
-              </a>
-            </p>
-            <p className="text-center">
-              HomeRemedy.in Co-founder and Chief Executive Officer
+             Founder and CEO of HomeRemedy.org
             </p>
           </div>
         </div>
