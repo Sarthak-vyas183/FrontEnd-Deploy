@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
 import gsap from "gsap";
-
+import logo from "../../assets/LOGO.png"
 function Nav() {
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -86,8 +87,8 @@ function Nav() {
           <div className="flex items-center">
             <h1 className="text-gray-100 flex gap-2">
               <img
-                className="w-10 h-10 text-green-800"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                className="w-10 h-10 bg-white rounded-full bg-opacity-10"
+                src={logo}
                 alt="Logo"
               />
               <p>HomeRemedies</p>
