@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../Store/useAuth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -67,10 +69,10 @@ function Profile() {
         throw new Error("Internal Server Error");
       }
 
-      alert("Profile Updated");
+      toast.success("Profile Updated");
       setIsEditing(false);
     } catch (error) {
-      alert("Error: Unable to save profile. Try again later.");
+      toast.error("Error: Unable to save profile. Try again later.");
       console.error(error);
     }
   };
@@ -89,12 +91,12 @@ function Profile() {
 
   const UpdateProfile = async () => {
     if (!profileImageFile) {
-      alert("Please Upload Profile Pic");
+      toast.error("Please Upload Profile Pic");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("profileImage", profileImageFile);
+  const formData = new FormData();
+  formData.append("profileImage", profileImageFile);
 
     try {
       const response = await fetch(`${baseUrl}/user/updateProfile`, {
@@ -115,11 +117,11 @@ function Profile() {
         setProfileImg(result.profileimg);
       }
 
-      alert("Profile Image Updated");
+      toast.success("Profile Image Updated");
 
       setProfileImageFile(null);
     } catch (error) {
-      alert("Error: Unable to update profile. Try again later.");
+      toast.info("Error: Unable to update profile. Try again later.");
       console.error(error);
     }
   };
@@ -160,11 +162,11 @@ function Profile() {
       }
   
       const data = await response.json(); 
-      alert("Your request to become a doctor has been sent to the admin");
+      toast.info("Your request to become a doctor has been sent to the admin");
       handleBecomeDoctorCancelclick();
     } catch (error) {
       console.log(`Error occurred: ${error}`);
-      alert("An error occurred while sending the request.");
+      toast.error("An error occurred while sending the request.");
     }
   };
   
@@ -187,10 +189,10 @@ function Profile() {
         throw new Error("Failed to delete account.");
       }
       localStorage.removeItem("token");
-      alert("Account deleted successfully.");
+      toast.success("Account deleted successfully.");
       navigate("/");
     } catch (error) {
-      alert(
+      toast.error(
         "Error: Unable to delete account. Please check your password and try again."
       );
       console.error(error);

@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Store/useAuth';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { toast } from 'react-toastify';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function SignUp() {
   const [Errmsg, setErrmsg] = useState("");
@@ -44,7 +46,7 @@ function SignUp() {
         } else {
           setErrmsg(data.msg.issues[0].message);
         }
-        alert(Errmsg);
+        toast.error(Errmsg);
         throw new Error(`Network response was not ok: ${response.status}`);
       }
 
@@ -56,12 +58,12 @@ function SignUp() {
         ph_no: "",
         password: ""
       });
-      alert("Sign-up successful");
+      toast.success("Sign-up successful");
       navigate("/");
 
     } catch (error) {
       console.error('Fetch error:', error);
-      alert(error);
+      toast.error(error);
     }
   }
 

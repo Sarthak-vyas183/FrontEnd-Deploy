@@ -1,5 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useAuth } from '../Store/useAuth';
+import { toast } from 'react-toastify';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function ContactDoctorForm() {
@@ -65,7 +68,7 @@ function ContactDoctorForm() {
       });
 
       if (response.status === 200) {
-        alert('Request submitted successfully!');
+        toast.success('Request submitted successfully!');
         // Clear the form after successful submission
         setFormData({
           doctorEmail: '',
@@ -76,10 +79,10 @@ function ContactDoctorForm() {
         setVerificationMessage(''); // Clear the verification message
         setSubmitDisabled(true); // Disable the submit button
       } else {
-        alert('Failed to submit request.');
+        toast.error('Failed to submit request.');
       }
     } catch (error) {
-      alert(`Submit Error: ${error.message}`);
+      toast.error(`Submit Error: ${error.message}`);
     }
   };
 

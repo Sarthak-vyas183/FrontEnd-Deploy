@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useAuth } from "../Store/useAuth";
+import { toast } from 'react-toastify';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const RemedyForm = () => {
@@ -46,7 +48,7 @@ const RemedyForm = () => {
                 body: formDataToSend
             });
             if (response.ok) {
-                alert('Remedy submitted successfully');
+                toast.success('Remedy submitted successfully');
                 setFormData({
                     title: '',
                     description: '',
@@ -57,7 +59,7 @@ const RemedyForm = () => {
                     image: null
                 });
             } else {
-                alert('Error submitting remedy');
+                toast.error('Error submitting remedy');
             }
         } catch (error) {
             console.error('Error:', error);

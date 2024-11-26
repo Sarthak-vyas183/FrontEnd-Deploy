@@ -1,4 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
 import gsap from "gsap";
@@ -34,7 +37,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrMsg(""); // Clear previous error messages
+
 
     try {
       const response = await fetch(`${baseUrl}/user/login`, {
@@ -50,8 +53,8 @@ const Login = () => {
       if (!response.ok) {
         const errorMessage =
           data.msg?.issues?.[0]?.message || data.msg || "Login failed.";
-          console.log(response);
-        setErrMsg(errorMessage);
+          setErrMsg(errorMessage);
+          toast.error(errorMessage)
         return;
       }
 
@@ -60,10 +63,12 @@ const Login = () => {
         email: "",
         password: "",
       });
+      setErrMsg("login Success")
+      toast.success("login Success")
       navigate("/");
     } catch (error) {
       setErrMsg("Login failed. Please check your credentials.");
-      console.log(error)
+      toast.error("Login failed. Please check your credentials")
     }
   };
 

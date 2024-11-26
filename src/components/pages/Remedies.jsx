@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,7 +19,7 @@ const Remedies = () => {
         setRemedies(res.data);
       } catch (error) {
         console.error("Error fetching remedies:", error);
-        alert("Failed to load remedies.");
+        toast.error("Failed to load remedies.");
       } finally {
         setLoading(false);
       }

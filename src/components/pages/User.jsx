@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, NavLink, Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
@@ -45,7 +48,7 @@ function User() {
           </>
          ) : (
           <>
-            <i class="ri-close-large-line text-4xl"></i>
+            <i className="ri-close-large-line text-4xl"></i>
              <p className="text-2xl">Close</p>
 
           </>

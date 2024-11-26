@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
+import { toast } from "react-toastify";
 
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -75,7 +78,7 @@ function RemedyDetail() {
       setOwner(data.ownerdata);
     } catch (error) {
       console.error("Error fetching remedy details:", error);
-      alert("Error fetching remedy details");
+      toast.error("Error fetching remedy details");
     }
   };
 
@@ -110,12 +113,12 @@ function RemedyDetail() {
       });
 
       if (!response.ok) {
-        alert("Failed to post : Please Login")
+        toast.error("Failed to post : Please Login")
         throw new Error("Failed to post comment");
       }
 
       const data = await response.json();
-      alert("Comment Post");
+      toast.success("Comment Post");
       setComment("");
       showComments();
     } catch (error) {
@@ -142,11 +145,11 @@ function RemedyDetail() {
       } else if (response.status === 200) {
         
         setRemedySaved(true);
-        alert("Saved")
+        toast.info("Saved")
       } else if(response.status === 401) {
-         alert("Please login to Save ")
+         toast.info("Please login to Save ")
       } else {
-         alert("Not an authorized user")
+         toast.error("Not an authorized user")
       }
 
       
