@@ -39,7 +39,7 @@ const Remedies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 relative top-[10vh]">
+    <div className="min-h-screen bg-gray-100 relative mt-[10vh]">
       <h1 className="text-4xl font-bold text-center mb-6 w-full h-[5%]">Remedies</h1>
       {loading ? (
         <div className="flex justify-center items-center h-full">
