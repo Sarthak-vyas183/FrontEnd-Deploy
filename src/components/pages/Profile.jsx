@@ -348,7 +348,7 @@ function Profile() {
                 className="flex justify-between mt-4 mb-4"
                 onClick={BecomeDoctor}
               >
-                <div className={` ${user.isAdmin ? 'hidden' : 'flex' } justify-between w-full`}>
+                <div className={` ${user && user.isAdmin ? 'hidden' : 'flex' } justify-between w-full`}>
                   <p>Become a Doctor</p>
                   <p
                     className={` bg-red-100 px-2 py-1 text-green-700 rounded cursor-pointer`}

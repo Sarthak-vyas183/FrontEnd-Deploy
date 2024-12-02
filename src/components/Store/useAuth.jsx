@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       userverification();
     }
-  }, [token, user]);
+  }, [token]);
 
   return (
     <AuthContext.Provider
