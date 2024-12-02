@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Profile() {
-  const { user, token } = useAuth();
+  const { user, token, LogoutUser } = useAuth();
 
   const navigate = useNavigate();
   const [profileImg, setProfileImg] = useState();
@@ -95,8 +95,8 @@ function Profile() {
       return;
     }
 
-  const formData = new FormData();
-  formData.append("profileImage", profileImageFile);
+    const formData = new FormData();
+    formData.append("profileImage", profileImageFile);
 
     try {
       const response = await fetch(`${baseUrl}/user/updateProfile`, {
@@ -146,7 +146,7 @@ function Profile() {
       const formData = new FormData();
       formData.append("RMP_No", RMP_NO);
       formData.append("RMP_img", RMP_img);
-  
+
       const response = await fetch(`${baseUrl}/auth/become_doctor`, {
         method: "POST",
         headers: {
@@ -154,14 +154,14 @@ function Profile() {
         },
         body: formData,
       });
-  
+
       if (!response.ok) {
         const text = await response.text();
         console.log(text);
         return alert("Failed to send request: " + text);
       }
-  
-      const data = await response.json(); 
+
+      const data = await response.json();
       toast.info("Your request to become a doctor has been sent to the admin");
       handleBecomeDoctorCancelclick();
     } catch (error) {
@@ -169,7 +169,7 @@ function Profile() {
       toast.error("An error occurred while sending the request.");
     }
   };
-  
+
   const BecomeDoctor = () => {
     setDoctorForm(true);
   };
@@ -190,6 +190,7 @@ function Profile() {
       }
       localStorage.removeItem("token");
       toast.success("Account deleted successfully.");
+      LogoutUser()
       navigate("/");
     } catch (error) {
       toast.error(
@@ -347,10 +348,14 @@ function Profile() {
                 className="flex justify-between mt-4 mb-4"
                 onClick={BecomeDoctor}
               >
-                <p>Become a Doctor</p>
-                <p className="bg-red-100 px-2 py-1 text-green-700 rounded cursor-pointer">
-                  Doctor
-                </p>
+                <div className={` ${user.isAdmin ? 'hidden' : 'flex' } justify-between w-full`}>
+                  <p>Become a Doctor</p>
+                  <p
+                    className={` bg-red-100 px-2 py-1 text-green-700 rounded cursor-pointer`}
+                  >
+                    Doctor
+                  </p>
+                </div>
               </div>
             )}
           </div>
@@ -471,7 +476,9 @@ function Profile() {
             <h2 className="text-2xl font-bold mb-4 text-blue-600">
               Verify Yourself
             </h2>
-            <p className="text-gray-600 mb-4">Please Enter Certificate No. and Upload Certificate</p>
+            <p className="text-gray-600 mb-4">
+              Please Enter Certificate No. and Upload Certificate
+            </p>
             <input
               type="text"
               value={RMP_NO}

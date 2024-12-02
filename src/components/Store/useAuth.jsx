@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { createContext, useContext, useState, useEffect } from "react";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 export const AuthContext = createContext();
@@ -50,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       userverification();
     }
-  }, [token]);
+  }, [token, user]);
 
   return (
     <AuthContext.Provider

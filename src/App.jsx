@@ -8,7 +8,9 @@ function App() {
   
   return (
     <div className='overflow-x-hidden'>
-     <ToastContainer />
+     <ToastContainer
+      autoClose={1000}
+     />
      <Nav/>
      <Router/>
      <Footer/>
