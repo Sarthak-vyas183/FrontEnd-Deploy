@@ -3,7 +3,7 @@ import { useAuth } from "../Store/useAuth";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { toast } from "react-toastify";
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/";
 
 function SignUp() {
   const [step, setStep] = useState(1);
@@ -50,6 +50,12 @@ function SignUp() {
       toast.error("Please fill out all fields in this step.");
       return;
     }
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
     setStep(2);
   };
 
@@ -59,11 +65,37 @@ function SignUp() {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+    // Validate phone number
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(user.ph_no)) {
+      toast.error("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    // Validate password strength
+    if (user.password.length < 8) {
+      toast.error("Password must be at least 8 characters long.");
+      return;
+    }
+
     try {
       const formData = new FormData();
       Object.keys(user).forEach((key) => {
         if (user[key]) formData.append(key, user[key]);
       });
+
+      // Validate avatar file type and size
+      if (user.avatar) {
+        const allowedTypes = ["image/jpeg", "image/png"];
+        if (!allowedTypes.includes(user.avatar.type)) {
+          toast.error("Avatar must be a JPEG or PNG image.");
+          return;
+        }
+        if (user.avatar.size > 2 * 1024 * 1024) {
+          toast.error("Avatar file size must be less than 2MB.");
+          return;
+        }
+      }
 
       const response = await fetch(`${baseUrl}user/register`, {
         method: "POST",
@@ -83,8 +115,7 @@ function SignUp() {
         toast.error(errorMessage);
         return;
       }
-
-      storeTokenInLs(data.token);
+      storeTokenInLs(data.data.accessToken);
       toast.success(data.msg || "Sign-up successful!");
       navigate("/");
     } catch (error) {
