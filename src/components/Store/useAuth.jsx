@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState();
-  
+
 
   const storeTokenInLs = (serverToken) => {
     setToken(serverToken);
@@ -93,6 +93,50 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Check if a remedy is bookmarked by the user
+  const checkIfBookmarked = async (productId) => {
+    if (!token) return { bookmarked: false, data: null };
+    try {
+      const response = await fetch(
+        `${baseUrl}Bookmark/check/p/${productId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return { bookmarked: false, data: null };
+    } catch (error) {
+      return { bookmarked: false, data: null };
+    }
+  };
+
+  // Toggle bookmark for a remedy
+  const toggleBookmark = async (productId) => {
+    if (!token) return null;
+    try {
+      const response = await fetch(
+        `${baseUrl}Bookmark/toggle/p/${productId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (token) {
       userverification();
@@ -109,7 +153,9 @@ export const AuthProvider = ({ children }) => {
         LogoutUser,
         updateUser,
         isRemedyLikedByUser,
-        toggleRemedyLike
+        toggleRemedyLike,
+        checkIfBookmarked,
+        toggleBookmark
       }}
     >
       {children}
