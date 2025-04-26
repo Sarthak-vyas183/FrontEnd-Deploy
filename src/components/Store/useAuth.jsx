@@ -25,9 +25,9 @@ export const AuthProvider = ({ children }) => {
   const userverification = async () => {
     try {
       const response = await fetch(
-        `${baseUrl}/auth/userverification`,
+        `${baseUrl}user/verifyUserToken`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,8 +35,8 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        setUser(data.userdata);
+        const res = await response.json();
+        setUser(res);
       } else {
         console.log(`Error: ${response.statusText}`);
       }
@@ -49,6 +49,50 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
   };
 
+  // Check if the current user liked a specific remedy
+  const isRemedyLikedByUser = async (remedyId) => {
+    if (!token) return { liked: false, like: null };
+    try {
+      const response = await fetch(
+        `${baseUrl}like/byUser/${remedyId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return { liked: false, like: null };
+    } catch (error) {
+      return { liked: false, like: null };
+    }
+  };
+
+  // Toggle like/unlike for a remedy
+  const toggleRemedyLike = async (remedyId) => {
+    if (!token) return null;
+    try {
+      const response = await fetch(
+        `${baseUrl}like/toggle/p/${remedyId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (token) {
       userverification();
@@ -57,7 +101,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedin, storeTokenInLs, token, LogoutUser , updateUser }}
+      value={{
+        user,
+        isLoggedin,
+        storeTokenInLs,
+        token,
+        LogoutUser,
+        updateUser,
+        isRemedyLikedByUser,
+        toggleRemedyLike
+      }}
     >
       {children}
     </AuthContext.Provider>

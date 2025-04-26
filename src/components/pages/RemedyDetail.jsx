@@ -1,386 +1,280 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../Store/useAuth";
 import { toast } from "react-toastify";
-
-
+import { useAuth } from "../Store/useAuth";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
-function RemedyDetail() {
-  const { token } = useAuth();
-  const [currRemedy, setCurrRemedy] = useState(null);
-  const [owner, setOwner] = useState("");
+
+const RemedyDetail = () => {
   const { id } = useParams();
-  const [comment, setComment] = useState("");
-  const [commentOnRemedy, setCommentOnRemedy] = useState([]);
-  const [RemedySaved, setRemedySaved] = useState(null);
-  const [defaultimg , setdetaultimg] = useState('../../../images/user.png');
+  const [remedy, setRemedy] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(true);
+  const { user, token, isRemedyLikedByUser, toggleRemedyLike } = useAuth();
+  const [isLiked, setIsLiked] = useState(false);
 
-  const showComments = async () => {
+  const fetchRemedyDetail = async () => {
     try {
-      const response = await fetch(`${baseUrl}/auth/showcomments`, {
+      const response = await fetch(`${baseUrl}remedy/${id}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ RemedyId: id }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
       });
-  
-      if (!response.ok) throw new Error("Internal server error!");
-  
-      const res = await response.json();
-      const comments = res.data || [];
-  
-      const commentsWithUserData = await Promise.all(
-        comments.map(async (comment) => {
-          const userResponse = await fetch(`${baseUrl}/auth/showcommentuser`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ user: comment.userId }),
-          });
-  
-          if (!userResponse.ok) throw new Error("Failed to fetch user data");
-  
-          const userData = await userResponse.json();
-          return {
-            ...comment,
-            commenter: userData.commenter,
-          };
-        })
-      );
-  
-      // Sort comments by createdAt in descending order
-      commentsWithUserData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
-      setCommentOnRemedy(commentsWithUserData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  
-
-  useEffect(() => {
-    showComments();
-  }, [id, token]);
-
-  const curr_remedy = async () => {
-    try {
-      const response = await fetch(`${baseUrl}/auth/remedydetail/${id}`);
-      if (!response.ok) {
-        throw new Error("Remedy Detail Not Found");
-      }
       const data = await response.json();
-      setCurrRemedy(data.remedydetail);
-      setOwner(data.ownerdata);
+      setRemedy(data.data);
     } catch (error) {
       console.error("Error fetching remedy details:", error);
-      toast.error("Error fetching remedy details");
+      toast.error("Failed to load remedy details.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    curr_remedy();
-  }, [id]);
-
-  const getImageSrc = (buffer) => {
-    if (!buffer) return "";
-    const binary = new Uint8Array(buffer.data).reduce(
-      (acc, byte) => acc + String.fromCharCode(byte),
-      ""
-    );
-    const base64String = window.btoa(binary);
-    return `data:image/jpeg;base64,${base64String}`;
-  };
-
-  const handleInput = (e) => {
-    setComment(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchComments = async () => {
     try {
-      const response = await fetch(`${baseUrl}/auth/comment`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ comment, RemedyId: id }),
-      });
-
-      if (!response.ok) {
-        toast.error("Failed to post : Please Login")
-        throw new Error("Failed to post comment");
-      }
-
+      const response = await fetch(`${baseUrl}comment/p/${id}`);
       const data = await response.json();
-      toast.success("Comment Post");
-      setComment("");
-      showComments();
+      setComments(data.data);
     } catch (error) {
-      console.log(`Internal server error: ${error}`);
+      console.error("Error fetching comments:", error);
+      toast.error("Failed to load comments.");
     }
   };
-
-  const bookMarkRemedy = async () => {
-    try {
-      const response = await fetch(`${baseUrl}/auth/bookmark`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ RemedyId: id }),
-      });
-
-    
-
-      if (response.status === 403) {
-       
-        setRemedySaved(false);
-      } else if (response.status === 200) {
-        
-        setRemedySaved(true);
-        toast.info("Saved")
-      } else if(response.status === 401) {
-         toast.info("Please login to Save ")
-      } else {
-         toast.error("Not an authorized user")
-      }
-
-      
-       
-    } catch (error) {
-      console.log(`Internal server error: ${error}`);
-    }
-  };
-
-  const bookMarkOrNot = async () => {
-    try {
-      const response = await fetch(`${baseUrl}/auth/bookmarkornot`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ RemedyId: id }),
-      });
-
-      if (response.status === 403) {
-        setRemedySaved(true);
-      } else if (response.status === 200) {
-        setRemedySaved(false);
-       
-      } 
-
-      if (!response.ok) {
-        console.log("Server side error");
-        return;
-      }
-    } catch (error) {
-      console.log(`Internal server error: ${error}`);
-    }
-  };
-
+  
   useEffect(() => {
-   if (id && token) {
-      bookMarkOrNot();
-    }
-  }, [id, token]);
-  
-  const [ownerDetailshow , setOwnerDetailshow] = useState("hidden")
- 
-  
+    fetchRemedyDetail();
+    fetchComments();
+    // Check if remedy is liked by user
+    const checkLiked = async () => {
+      if (id && isRemedyLikedByUser) {
+        const res = await isRemedyLikedByUser(id);
+        setIsLiked(res.liked);
+      }
+    };
+    checkLiked();
+  }, [id, isRemedyLikedByUser]);
 
-  if (!currRemedy) {
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) {
+      toast.error("Comment cannot be empty.");
+      return;
+    }
+    try {
+      const response = await fetch(`${baseUrl}comment/p/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: newComment, onModel: "Remedy" }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setNewComment("");
+        setComments((prev) => [data.data, ...prev]);
+        toast.success("Comment added successfully.");
+      } else {
+        toast.error("Failed to add comment.");
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment.");
+    }
+  };
+
+  const handleToggleLike = async () => {
+    const res = await toggleRemedyLike(id);
+    if (res && res.success) {
+      setIsLiked(res.message === "Product Liked Successfully");
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="w-[100vw] h-[90vh] relative top-[10vh] flex justify-center items-center">
-        <p className="text-3xl font-semibold">Loading...</p>
+      <div className="flex justify-center items-center h-screen">Loading...</div>
+    );
+  }
+  if (!remedy) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Remedy not found.
       </div>
     );
   }
 
   return (
-    <>
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          display: none; /* Safari and Chrome */
-        }
-        .custom-scrollbar {
-          -ms-overflow-style: none; /* Internet Explorer and Edge */
-          scrollbar-width: none; /* Firefox */
-        }
-      `}</style>
-
-<div className="w-[100vw] h-[90vh] top-[10vh] flex flex-row max-sm:flex-col overflow-x-hidden">
-
-  <div className="fixed w-[20%] h-full max-sm:hidden left-0 top-[10vh] border-r border-black">
-    <div className="w-full h-48 px-2">
-      <div className="w-full h-12 flex justify-start items-center gap-2 border-y px-2 border-black">
-        <img
-          className="w-8 h-8 rounded-full"
-          src={getImageSrc(owner.profileimg) || defaultimg}
-          alt=""
-        />
-        <p>{owner.fullname}</p>
-      </div>
-      <div className="flex gap-4">
-        <span>Email :</span>
-        <span>{owner.email}</span>
-      </div>
-      <div className="flex gap-4">
-        <span>Phone :</span>
-        <span>{owner.ph_no}</span>
-      </div>
-      <div className="flex gap-4">
-        <span>Status :</span>
-        <span>{owner.isDoctor ? "Doctor" : "User"}</span>
-      </div>
-      <div className="flex justify-start mt-2">
-        <button className="p-1 text-white bg-blue-700 rounded-md">
-          Connect
-        </button>
-      </div>
-    </div>
-  </div>
-
-  
-<div className="w-[50%] h-full ml-[20%] mr-[30%] max-sm:ml-0 max-sm:w-full p-8 max-sm:p-3 pb-28 max-sm:pb-2 fixed max-sm:relative top-[10vh] overflow-y-scroll custom-scrollbar">
-     
-    <div className="p-2 img w-[100%] h-auto flex flex-col items-center justify-center">
-     <div className="flex w-full justify-between px-4">
-      <i onClick={bookMarkRemedy} className={`ri-bookmark-${RemedySaved ? "fill" : "line"} ml-96 max-sm:ml-0`}>
-        {RemedySaved ? "Saved" : "Save"}
-      </i> 
-      
-      </div>
-      <img
-        className="w-[80%] h-full rounded-md"
-        src={getImageSrc(currRemedy.image)}
-        alt=""
-      />
-      <p className="opacity-70 underline cursor-pointer">Posted by : {owner.fullname}</p>
-    </div> 
-
-    <div className="title_desc">
-      <h1 className="font-medium">
-        <span className="font-semibold text-2xl">Title : </span>
-        {currRemedy.title}
-      </h1>
-      <br />
-      <p className="leading-tight">
-        <span className="font-semibold text-2xl">Description : <br /></span>
-        {currRemedy.description}
-      </p>
-      <br />
-    </div>
-    <div className="stepsAndIngredient">
-      <span>
-        <p className="font-semibold text-2xl">Ingredients : </p>
-        {currRemedy.ingredients}
-      </span>
-      <br />
-      <br />
-      <span>
-        <p className="font-semibold text-2xl">Steps :</p>
-        {currRemedy.steps}
-      </span>
-      <br />
-    </div>
-    <br />
-
-    <form
-      onSubmit={handleSubmit}
-      className="w-full flex justify-evenly items-center h-16"
-    >
-      <input
-        className="w-[75%] h-8 border-4 outline-none border-gray-300 px-2"
-        type="text"
-        placeholder="Comment here..."
-        onChange={handleInput}
-        value={comment}
-      />
-      <button
-        type="submit"
-        className="py-1 px-6 bg-blue-600 rounded-md text-white"
-      >
-        Post
-      </button>
-    </form> 
-
-    <div className="hidden max-sm:flex flex-col">
-    <h1>Comments :</h1> <br />
-    <section className="flex flex-col gap-8 mb-[15vh]">
-      {commentOnRemedy && commentOnRemedy.length > 0 ? (
-        commentOnRemedy.map((comment, index) => (
-          <div key={index} className="w-full h-auto border-y border-black">
-            <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
-              <img
-                className="w-8 h-8 rounded-full"
-                src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
-                alt=""
-              />
-              <p className="flex">
-                <span className="text-green-600">
-                  {comment.commenter?.isDoctor ? "Dr." : ""}
-                </span>
-                {comment.commenter?.fullname || "Unknown User"}
-              </p>
-              <p className="text-xs text-gray-500">  {new Date(comment.createdAt).toLocaleDateString()}</p>
-            </span>
-            <p>{comment.comment}</p>
-          </div>
-        ))
-      ) : (
-        <p>No comments yet</p>
-      )}
-    </section>
-    </div>  
-
-</div> 
-
- 
-  <div className="fixed w-[30%] max-sm:hidden h-full right-0 top-[10vh] max-sm:top-0  overflow-y-scroll pr-2 custom-scrollbar">
-    <h1>Comments :</h1> <br />
-    <section className="flex flex-col gap-8 mb-[15vh]">
-  {commentOnRemedy && commentOnRemedy.length > 0 ? (
-    commentOnRemedy.map((comment, index) => (
-      <div key={index} className="w-full h-auto border-y border-black">
-        <span className="p-2 border-b border-black w-full h-10 flex justify-start items-center gap-2">
+    <div className="min-h-screen bg-gray-100 p-6 pt-[13vh]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Left: Remedy Detail (70%) */}
+        <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-8">
           <img
-            className="w-8 h-8 rounded-full"
-            src={getImageSrc(comment.commenter?.profileimg) || defaultimg}
-            alt=""
+            src={remedy.image}
+            alt={remedy.title}
+            className="w-full h-64 object-cover rounded-lg mb-4"
           />
-          <div className="flex flex-col">
-            <p className="flex">
-              <span className="text-green-600">
-                {comment.commenter?.isDoctor ? "Dr." : ""}
-              </span>
-              {comment.commenter?.fullname || "Unknown User"}
-            </p>
-            <p className="text-xs text-gray-500">  {new Date(comment.createdAt).toLocaleDateString()}</p>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold">{remedy.title}</h1>
+            {/* Like Button */}
+            <button
+              className="flex items-center transition-colors"
+              onClick={handleToggleLike}
+              title="Like"
+            >
+              {isLiked ? (
+                // Filled red heart
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="red"
+                  viewBox="0 0 24 24"
+                  className="w-7 h-7 mr-1"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              ) : (
+                // Empty heart
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="white"
+                  stroke="red"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  className="w-7 h-7 mr-1"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              )}
+              {isLiked ? "Liked" : "Like"}
+            </button>
           </div>
-        </span>
-        <p>{comment.comment}</p>
+          <p className="text-gray-700 mb-4">{remedy.description}</p>
+
+          <section className="mb-4">
+            <h2 className="text-xl font-semibold mb-2">Ingredients:</h2>
+            <ul className="list-disc list-inside">
+              {remedy.ingredients.map((ing, i) => (
+                <li key={i}>{ing}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mb-4">
+            <h2 className="text-xl font-semibold mb-2">Steps:</h2>
+            <ol className="list-decimal list-inside">
+              {remedy.steps.map((step, i) => (
+                <li key={i}>{step}</li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="mb-4">
+            <h2 className="text-xl font-semibold mb-2">Ailments:</h2>
+            <ul className="list-disc list-inside">
+              {remedy.ailments.map((ailment, i) => (
+                <li key={i}>{ailment}</li>
+              ))}
+            </ul>
+          </section>
+
+          <div className="flex items-center mb-4">
+            <span
+              className={`px-3 py-1 rounded-full text-white ${
+                remedy.isVerified ? "bg-green-500" : "bg-yellow-500"
+              }`}
+            >
+              {remedy.isVerified ? "Verified" : "Pending Verification"}
+            </span>
+          </div>
+
+          <a
+            href={remedy.EcommerceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            Buy Related Products
+          </a>
+        </div>
+
+        {/* Right: Owner Details + All Comments (30%) */}
+        <div className="md:col-span-4 flex flex-col space-y-6">
+          {/* Owner Details */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-4">Owner Details</h2>
+            <div className="flex items-center">
+              <img
+                src={remedy.userId.avatar}
+                alt={remedy.userId.username}
+                className="w-16 h-16 rounded-full mr-4"
+              />
+              <div>
+                <p className="font-semibold text-lg">
+                  {remedy.userId.fullName}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {remedy.userId.email}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {remedy.userId.location}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Comments List */}
+          <div className="bg-white rounded-lg shadow-lg p-6 overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4">
+              Comments ({comments.length})
+            </h2>
+            <div className="space-y-4 max-h-[60vh]">
+              {comments.map((comment) => (
+                <div
+                  key={comment._id}
+                  className="border-b pb-4 last:border-none"
+                >
+                  <div className="flex items-center mb-2">
+                    <img
+                      src={comment.ownerDetail[0].avatar}
+                      alt={comment.ownerDetail[0].username}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <p className="font-semibold">
+                        {comment.ownerDetail[0].fullName}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {comment.ownerDetail[0].email}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-700">{comment.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom-left: Comment Box */}
+        <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-8">
+          <h2 className="text-2xl font-bold mb-4">Add a Comment</h2>
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            className="w-full p-3 border rounded-lg mb-4"
+          />
+          <button
+            onClick={handleCommentSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Post Comment
+          </button>
+        </div>
       </div>
-    ))
-  ) : (
-    <p>No comments yet</p>
-  )}
-</section>
-
-  </div> 
-
-</div>
-
-
-    </>
+    </div>
   );
-}
+};
 
 export default RemedyDetail;

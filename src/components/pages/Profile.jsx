@@ -8,10 +8,9 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Profile() {
   const { user, token, LogoutUser } = useAuth();
-
+   console.log(user);
   const navigate = useNavigate();
-  const [profileImg, setProfileImg] = useState();
-  const [defaultProfileImg, setDefaultProfileImg] = useState(
+  const [defaultavatar, setDefaultavatar] = useState(
     "../../../images/user.png"
   );
 
@@ -23,7 +22,7 @@ function Profile() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [fullname, setFullname] = useState(user?.fullname || "");
+  const [fullName, setFullName] = useState(user?.fullName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [location, setLocation] = useState(user?.location || "");
   const [bio, setBio] = useState(user?.bio || "");
@@ -31,11 +30,11 @@ function Profile() {
   const [preferredLanguage, setLanguage] = useState(
     user?.preferredLanguage || ""
   );
-  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [avatar, setAvatar] = useState(user?.avatar || defaultavatar);
 
   useEffect(() => {
-    if (user && user.profileimg) {
-      setProfileImg(user.profileimg);
+    if (user && user.avatar) {
+      setAvatar(user.avatar);
     }
   }, [user]);
 
@@ -56,7 +55,7 @@ function Profile() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          fullname,
+          fullName,
           email,
           location,
           bio,
@@ -83,7 +82,7 @@ function Profile() {
       setProfileImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImg(reader.result);
+        setAvatar(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -113,8 +112,8 @@ function Profile() {
 
       const result = await response.json();
 
-      if (result.profileimg) {
-        setProfileImg(result.profileimg);
+      if (result.avatar) {
+        setAvatar(result.avatar);
       }
 
       toast.success("Profile Image Updated");
@@ -200,15 +199,7 @@ function Profile() {
     }
   };
 
-  const getImageSrc = (buffer) => {
-    if (!buffer) return "";
-    const binary = new Uint8Array(buffer.data).reduce(
-      (acc, byte) => acc + String.fromCharCode(byte),
-      ""
-    );
-    const base64String = window.btoa(binary);
-    return `data:image/jpeg;base64,${base64String}`;
-  };
+
 
   return (
     <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 max-sm:pb-32 bg-gray-100">
@@ -217,7 +208,7 @@ function Profile() {
           <div className="flex flex-col items-center">
             <img
               className="w-20 h-20 md:w-24 md:h-24 rounded-full"
-              src={getImageSrc(profileImg) || defaultProfileImg}
+              src={avatar || defaultavatar}
               alt="Profile"
             />
             <p className="font-semibold text-blue-600 underline cursor-pointer flex flex-col items-center mt-2">
@@ -232,7 +223,7 @@ function Profile() {
           </div>
 
           <div className="text-center md:text-left">
-            <h1 className="text-xl md:text-2xl font-bold">{user?.fullname}</h1>
+            <h1 className="text-xl md:text-2xl font-bold">{user?.fullName}</h1>
             <p className="text-gray-500">{user?.role}</p>
           </div>
         </div>
@@ -265,7 +256,7 @@ function Profile() {
             <div className="flex justify-between">
               <p>Created Remedy</p>
               <span className="bg-green-100 my-2 text-green-700 px-2 py-1 rounded">
-                {user?.remedyList.length || "0"}
+                {user?.remedyList?.length || "0"}
               </span>
             </div>
             <div className="flex justify-between">
@@ -370,8 +361,8 @@ function Profile() {
               <label className="block text-gray-700">Full Name</label>
               <input
                 type="text"
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="w-full border rounded p-2"
               />
             </div>
