@@ -60,8 +60,8 @@ const Remedies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 relative mt-[10vh]">
-      <h1 className="text-5xl font-extrabold text-center mb-8 text-blue-700">Remedies</h1>
+    <div className="min-h-screen bg-gradient-to-b from-green-200 via-green-50 to-emerald-100 relative mt-[10vh]">
+      <h1 className="text-5xl font-extrabold text-center mb-8 text-emerald-700">Remedies</h1>
       {loading ? (
         <div className="flex justify-center items-center h-full">
           <p className="text-lg text-gray-600 animate-pulse">Loading...</p>
@@ -82,7 +82,7 @@ const Remedies = () => {
                 {remedy.isVerified ? (
                   <img
                     src="../../../images/verified-icon.png"
-                    className="w-10 h-10 bg-green-500 rounded-full shadow-md"
+                    className="w-10 h-10 bg-emerald-500 rounded-full shadow-md"
                     alt="Verified"
                   />
                 ) : (
@@ -131,7 +131,7 @@ const Remedies = () => {
                     Like
                   </button>
                   <button
-                    className="flex items-center text-blue-500 hover:text-blue-700"
+                    className="flex items-center text-emerald-500 hover:text-emerald-700"
                     onClick={() => console.log(`Play video for remedy: ${remedy._id}`)}
                   >
                     <svg
@@ -146,7 +146,7 @@ const Remedies = () => {
                   </button>
                   <Link
                     to={`/remedy/${remedy._id}`}
-                    className="p-3 bg-blue-600 rounded-lg text-white font-semibold shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
+                    className="p-3 bg-emerald-600 rounded-lg text-white font-semibold shadow-md hover:bg-emerald-700 hover:shadow-lg transition-all duration-300"
                   >
                     Read more
                   </Link>

@@ -91,29 +91,29 @@ const RemedyDetail = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">Loading...</div>
+      <div className="flex justify-center items-center h-screen bg-green-100">Loading...</div>
     );
   }
   if (!remedy) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-green-100">
         Remedy not found.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 pt-[13vh]">
+    <div className="min-h-screen bg-gradient-to-b from-green-100 via-green-50 to-emerald-100 p-6 pt-[13vh]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Left: Remedy Detail (70%) */}
-        <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-8">
+        <div className="bg-green-50 rounded-lg shadow-lg p-6 md:col-span-8">
           <img
             src={remedy.image}
             alt={remedy.title}
             className="w-full h-64 object-cover rounded-lg mb-4"
           />
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold">{remedy.title}</h1>
+            <h1 className="text-3xl font-bold text-emerald-800">{remedy.title}</h1>
             <div className="flex items-center space-x-2">
               {/* Like Button */}
               <button
@@ -148,11 +148,11 @@ const RemedyDetail = () => {
               </button>
             </div>
           </div>
-          <p className="text-gray-700 mb-4">{remedy.description}</p>
+          <p className="text-emerald-900 mb-4">{remedy.description}</p>
 
           <section className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Ingredients:</h2>
-            <ul className="list-disc list-inside">
+            <h2 className="text-xl font-semibold mb-2 text-emerald-700">Ingredients:</h2>
+            <ul className="list-disc list-inside text-emerald-800">
               {remedy.ingredients.map((ing, i) => (
                 <li key={i}>{ing}</li>
               ))}
@@ -160,8 +160,8 @@ const RemedyDetail = () => {
           </section>
 
           <section className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Steps:</h2>
-            <ol className="list-decimal list-inside">
+            <h2 className="text-xl font-semibold mb-2 text-emerald-700">Steps:</h2>
+            <ol className="list-decimal list-inside text-emerald-800">
               {remedy.steps.map((step, i) => (
                 <li key={i}>{step}</li>
               ))}
@@ -169,8 +169,8 @@ const RemedyDetail = () => {
           </section>
 
           <section className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Ailments:</h2>
-            <ul className="list-disc list-inside">
+            <h2 className="text-xl font-semibold mb-2 text-emerald-700">Ailments:</h2>
+            <ul className="list-disc list-inside text-emerald-800">
               {remedy.ailments.map((ailment, i) => (
                 <li key={i}>{ailment}</li>
               ))}
@@ -179,7 +179,7 @@ const RemedyDetail = () => {
 
           <div className="flex items-center mb-4">
             <span
-              className={`px-3 py-1 rounded-full text-white ${remedy.isVerified ? "bg-green-500" : "bg-yellow-500"
+              className={`px-3 py-1 rounded-full text-white ${remedy.isVerified ? "bg-emerald-500" : "bg-yellow-500"
                 }`}
             >
               {remedy.isVerified ? "Verified" : "Pending Verification"}
@@ -190,7 +190,7 @@ const RemedyDetail = () => {
             href={remedy.EcommerceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
+            className="text-emerald-700 hover:underline"
           >
             Buy Related Products
           </a>
@@ -199,8 +199,8 @@ const RemedyDetail = () => {
         {/* Right: Owner Details + All Comments (30%) */}
         <div className="md:col-span-4 flex flex-col space-y-6">
           {/* Owner Details */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-4">Owner Details</h2>
+          <div className="bg-green-50 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-4 text-emerald-800">Owner Details</h2>
             <div className="flex items-center">
               <img
                 src={remedy.userId.avatar}
@@ -208,13 +208,13 @@ const RemedyDetail = () => {
                 className="w-16 h-16 rounded-full mr-4"
               />
               <div>
-                <p className="font-semibold text-lg">
+                <p className="font-semibold text-lg text-emerald-900">
                   {remedy.userId.fullName}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-emerald-700">
                   {remedy.userId.email}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-emerald-700">
                   {remedy.userId.location}
                 </p>
               </div>
@@ -222,15 +222,15 @@ const RemedyDetail = () => {
           </div>
 
           {/* Comments List */}
-          <div className="bg-white rounded-lg shadow-lg p-6 overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">
+          <div className="bg-green-50 rounded-lg shadow-lg p-6 overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4 text-emerald-800">
               Comments ({comments.length})
             </h2>
             <div className="space-y-4 max-h-[60vh]">
               {comments.map((comment) => (
                 <div
                   key={comment._id}
-                  className="border-b pb-4 last:border-none"
+                  className="border-b border-green-200 pb-4 last:border-none"
                 >
                   <div className="flex items-center mb-2">
                     <img
@@ -239,18 +239,18 @@ const RemedyDetail = () => {
                       className="w-10 h-10 rounded-full mr-3"
                     />
                     <div>
-                      <p className="font-semibold">
+                      <p className="font-semibold text-emerald-900">
                         {comment.ownerDetail[0].fullName}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-emerald-700">
                         {comment.ownerDetail[0].email}
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-emerald-400">
                         {new Date(comment.createdAt).toLocaleString()}
                       </p>
                     </div>
                   </div>
-                  <p className="text-gray-700">{comment.content}</p>
+                  <p className="text-emerald-900">{comment.content}</p>
                 </div>
               ))}
             </div>
@@ -258,17 +258,17 @@ const RemedyDetail = () => {
         </div>
 
         {/* Bottom-left: Comment Box */}
-        <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-8">
-          <h2 className="text-2xl font-bold mb-4">Add a Comment</h2>
+        <div className="bg-green-50 rounded-lg shadow-lg p-6 md:col-span-8">
+          <h2 className="text-2xl font-bold mb-4 text-emerald-800">Add a Comment</h2>
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
-            className="w-full p-3 border rounded-lg mb-4"
+            className="w-full p-3 border border-green-200 rounded-lg mb-4 bg-green-100 text-emerald-900"
           />
           <button
             onClick={handleCommentSubmit}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700"
           >
             Post Comment
           </button>

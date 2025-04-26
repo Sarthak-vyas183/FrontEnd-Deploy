@@ -40,81 +40,109 @@ function User() {
 
   return (
     <>
-      <div onClick={toggleExplore} className="max-sm:flex gap-3 px-2 font-semibold items-center w-full h-[7vh] mt-[10vh] text-black">
-         {explore.hide == "hidden" ? (
+      <div
+        onClick={toggleExplore}
+        className="max-sm:flex gap-3 px-2 font-semibold items-center w-full h-[7vh] mt-[10vh] text-black"
+      >
+        {explore.hide == "hidden" ? (
           <>
-          <i className="ri-menu-line text-4xl"></i> 
-          <p className="text-2xl">Explore</p>
+            <i className="ri-menu-line text-4xl"></i>
+            <p className="text-2xl">Explore</p>
           </>
-         ) : (
+        ) : (
           <>
             <i className="ri-close-large-line text-4xl"></i>
-             <p className="text-2xl">Close</p>
-
+            <p className="text-2xl">Close</p>
           </>
-         ) } 
-       
+        )}
       </div>
 
-      <div className="flex fixed top-[10vh] max-sm:top-[17vh] left-0 w-[100vw] bg-gray-800 text-white h-[90vh]">
-        <div className={`w-[20vw] max-sm:w-[25vw] max-sm:relative max-sm:${explore.hide} bg-gray-900 p-4 max-sm:p-0 max-sm:pt-4 flex max-sm:items-center flex-col space-y-6 max-sm:space-y-2 border-r-2 border-gray-700`}>
+      <div className="flex fixed top-[10vh] max-sm:top-[17vh] left-0 w-[100vw] h-[90vh]">
+        {/* Sidebar */}
+        <div
+          className={`w-[20vw] max-sm:w-[70vw] max-sm:relative max-sm:${explore.hide} bg-gradient-to-b from-green-600 via-green-400 to-green-200 p-4 max-sm:p-0 max-sm:pt-4 flex max-sm:items-center flex-col space-y-6 max-sm:space-y-2 border-r-2 border-green-400 shadow-xl z-20 transition-all duration-300`}
+        >
+          {/* Logo/Title */}
+          <div className="flex items-center gap-2 mb-6 max-sm:mb-2">
+            <i className="ri-leaf-fill text-3xl text-white"></i>
+            <span className="text-xl font-bold text-white tracking-wide">HomeRemedy</span>
+          </div>
+          {/* ...existing NavLinks... */}
+          {/* Replace NavLinks with the following for improved style */}
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center max-sm:justify-center gap-1 max-sm:gap-0 text-lg font-bold p-2   ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-3 text-lg font-semibold px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-white text-green-700 shadow"
+                  : "text-white hover:bg-green-500 hover:text-white"
+              }`
             }
             to="/user/profile"
           >
-            <i className="ri-profile-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">&nbsp;&nbsp;Profile&nbsp;</p>
+            <i className="ri-profile-line text-2xl"></i>
+            <span>Profile</span>
           </NavLink>
-
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2   ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-3 text-lg font-semibold px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-white text-green-700 shadow"
+                  : "text-white hover:bg-green-500 hover:text-white"
+              }`
             }
             to="/user/create"
           >
-            <i className="ri-quill-pen-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Create Remedy</p>
+            <i className="ri-quill-pen-line text-2xl"></i>
+            <span>Create Remedy</span>
           </NavLink>
-
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2   ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-3 text-lg font-semibold px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-white text-green-700 shadow"
+                  : "text-white hover:bg-green-500 hover:text-white"
+              }`
             }
             to="/user/myremedy"
           >
-            <i className="ri-inbox-archive-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">My Remedies</p>
+            <i className="ri-inbox-archive-fill text-2xl"></i>
+            <span>My Remedies</span>
           </NavLink>
-
-          <NavLink
-           onClick={toggleExplore}
-            className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2   ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
-            }
-            to="/user/contact"
-          >
-            <i className="ri-verified-badge-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Verify Remedy</p>
-          </NavLink>
-
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2   ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-3 text-lg font-semibold px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-white text-green-700 shadow"
+                  : "text-white hover:bg-green-500 hover:text-white"
+              }`
+            }
+            to="/user/contact"
+          >
+            <i className="ri-verified-badge-fill text-2xl"></i>
+            <span>Verify Remedy</span>
+          </NavLink>
+          <NavLink
+            onClick={toggleExplore}
+            className={({ isActive }) =>
+              `sidebar-item flex items-center gap-3 text-lg font-semibold px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-white text-green-700 shadow"
+                  : "text-white hover:bg-green-500 hover:text-white"
+              }`
             }
             to="/user/bookmarks"
           >
-            <i className="ri-save-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Saved Remedies</p>
+            <i className="ri-save-fill text-2xl"></i>
+            <span>Saved Remedies</span>
           </NavLink>
         </div>
 
-        <div className="w-[80vw] max-sm:w-[100vw] bg-gray-100 text-black overflow-y-scroll">
+        {/* Main Content */}
+        <div className="w-[80vw] max-sm:w-full bg-white/80 text-black overflow-y-scroll p-4 md:p-8 rounded-l-3xl shadow-inner min-h-full">
           <Outlet />
         </div>
       </div>
