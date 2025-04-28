@@ -202,9 +202,9 @@ function Profile() {
 
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden bg-gradient-to-br from-green-100 via-green-200 to-green-300">
+    <div className="w-full md:w-[80vw] h-[90vh] overflow-y-scroll overflow-x-hidden p-4 md:p-8 max-sm:pb-32 bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
       {/* Hero Section */}
-      <div className="w-full flex flex-col items-center justify-center py-10 bg-gradient-to-r from-green-400 via-green-300 to-green-200 shadow-lg mb-8">
+      <div className="w-full flex flex-col items-center justify-center py-10 bg-white shadow-lg mb-8 rounded-2xl">
         <img
           className="w-28 h-28 rounded-full border-4 border-green-500 shadow-lg mb-4"
           src={avatar || defaultavatar}
@@ -501,7 +501,7 @@ function Profile() {
         </div>
       )}
       {/* Footer */}
-      <footer className="w-full text-center text-gray-500 text-sm mt-16 mb-4">
+      <footer className="w-full text-center text-gray-500 text-sm mt-12 mb-4">
         &copy; {new Date().getFullYear()} HomeRemedy.in &mdash; All rights reserved.
       </footer>
     </div>
