@@ -73,6 +73,7 @@ function User() {
             <i className="ri-profile-line max-sm:text-3xl"></i>
             <p className="max-sm:text-sm">&nbsp;&nbsp;Profile&nbsp;</p>
           </NavLink>
+
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
@@ -83,6 +84,7 @@ function User() {
             <i className="ri-quill-pen-line max-sm:text-3xl"></i>
             <p className="max-sm:text-sm">Create Remedy</p>
           </NavLink>
+
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
@@ -93,36 +95,19 @@ function User() {
             <i className="ri-inbox-archive-fill max-sm:text-3xl"></i>
             <p className="max-sm:text-sm">My Remedies</p>
           </NavLink>
+
+         
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/user/users"
-          >
-            <i className="ri-team-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Users</p>
-          </NavLink>
-          <NavLink
-            onClick={toggleExplore}
-            className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
-            }
-            to="/user/manage"
+            to="/user/contact"
           >
             <i className="ri-checkbox-circle-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Manage Remedies</p>
+            <p className="max-sm:text-sm">Contact</p>
           </NavLink>
-          <NavLink
-            onClick={toggleExplore}
-            className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
-            }
-            to="/user/verify"
-          >
-            <i className="ri-user-check-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Verify Dr</p>
-          </NavLink>
+          
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
