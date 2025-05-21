@@ -23,7 +23,6 @@ import Verify_Remedy from '../IsDoctor/Verify_remedy';
 import RemedyDetail from '../pages/RemedyDetail';
 import VerificationReq from '../Admin/verificationReq';
 
-
 function Router() {
   return (
     <div>
@@ -58,7 +57,7 @@ function Router() {
              <Route path='verifyReq' element={<VerificationReq/>} />
         </Route> 
 
-        <Route path='/doctor' element={<IsDoctor/>}>
+        <Route path='/professional' element={<IsDoctor/>}>
              <Route path='create' element={<RemedyForm/>} />
              <Route path='profile' element={<Profile/>} />
              <Route path='myremedy' element={<MyRemedy/>} />

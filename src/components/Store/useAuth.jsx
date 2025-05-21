@@ -36,6 +36,10 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const res = await response.json();
+        // Map isprofessional to isProfessional for consistency
+        if (res && typeof res === "object" && res.isprofessional !== undefined) {
+          res.isProfessional = res.isprofessional;
+        }
         setUser(res);
       } else {
         console.log(`Error: ${response.statusText}`);

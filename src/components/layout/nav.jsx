@@ -133,12 +133,12 @@ function Nav() {
             {isLoggedin ? (
               <>
                 {user && user.isAdmin ? (
-                  <li className={`hover:text-yellow-300 ${navTextColor}`}>
+                  <li className={`hover:text-yellow-300 ${navTextColor}`}> 
                     <Link to="/admin/profile">Profile</Link>
                   </li>
-                ) : user && user.isDoctor ? (
+                ) : user && user.isprofessional ? (
                   <li className={`hover:text-yellow-300 ${navTextColor}`}>
-                    <Link to="/doctor/profile">Profile</Link>
+                    <Link to="/professional/profile">Profile</Link>
                   </li>
                 ) : (
                   <li className={`hover:text-yellow-300 ${navTextColor}`}>
@@ -225,9 +225,9 @@ function Nav() {
                     Profile
                   </Link>
                 </li>
-              ) : user && user.isDoctor ? (
+              ) : user && user.isprofessional ? (
                 <li className="px-4 py-2 text-2xl hover:bg-gray-700 cursor-pointer sidebar-item">
-                  <Link to="/doctor/profile" onClick={toggleSidebar}>
+                  <Link to="/professional/profile" onClick={toggleSidebar}>
                     Profile
                   </Link>
                 </li>

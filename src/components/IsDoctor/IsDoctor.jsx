@@ -25,7 +25,7 @@ function Doctor() {
     }
   }, [explore.hide]);
 
-  if (!user || !user.isDoctor) {
+  if (!user || !user.isprofessional) {
     return <Navigate to="/" />;
   }
 
@@ -63,7 +63,7 @@ function Doctor() {
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 max-sm:gap-0 text-lg font-bold p-2 ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/doctor/create"
+            to="/professional/create"
           >
             <i className="ri-quill-pen-line max-sm:text-3xl"></i>
             <p className="max-sm:text-sm">Create Remedy</p>
@@ -74,7 +74,7 @@ function Doctor() {
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 max-sm:gap-0 text-lg font-bold p-2 ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/doctor/myremedy"
+            to="/professional/myremedy"
           >
             <FaClipboardList className="max-sm:text-3xl" />
             <p className="max-sm:text-sm">My Remedies</p>
@@ -85,7 +85,7 @@ function Doctor() {
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 max-sm:gap-0 text-lg font-bold p-2 ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/doctor/verifyremedy"
+            to="/professional/verifyremedy"
           >
             <FaCheckCircle className="max-sm:text-3xl" />
             <p className="max-sm:text-sm">Verify Remedies</p>
@@ -96,7 +96,7 @@ function Doctor() {
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 max-sm:gap-0 text-lg font-bold p-2 ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/doctor/requests"
+            to="/professional/requests"
           >
             <FaClipboardCheck className="max-sm:text-3xl" />
             <p className="max-sm:text-sm">User's Requests</p>
@@ -107,7 +107,7 @@ function Doctor() {
             className={({ isActive }) =>
               `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 max-sm:gap-0 text-lg font-bold p-2 ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
             }
-            to="/doctor/bookmarks"
+            to="/professional/bookmarks"
           >
             <i className="ri-save-fill max-sm:text-3xl"></i>
             <p className="max-sm:text-sm">Saved Remedies</p>
