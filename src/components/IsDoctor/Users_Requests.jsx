@@ -10,8 +10,8 @@ function Users_Requests() {
 
   const UserRequests = async () => {
     try {
-      const response = await fetch(`${baseUrl}/doctor/requests`, {
-        method: "POST",
+      const response = await fetch(`${baseUrl}p/getAllVerificationReq`, {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -19,11 +19,12 @@ function Users_Requests() {
 
       if (!response.ok) {
         console.error("Response not OK");
+        console.log(response.json);
         return;
       }
 
       const res = await response.json();
-
+      console.log(res);
       if (!Array.isArray(res.data)) {
         console.error("Unexpected data format");
         return;
