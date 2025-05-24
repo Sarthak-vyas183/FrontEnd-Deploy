@@ -8,7 +8,6 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Profile() {
   const { user, token, LogoutUser } = useAuth();
-   console.log(user);
   const navigate = useNavigate();
   const [defaultavatar, setDefaultavatar] = useState(
     "../../../images/user.png"
