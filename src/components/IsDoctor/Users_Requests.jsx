@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Users_Requests() {
   const [userRequests, setUserRequests] = useState([]);
-  const [loading, setLoading] = useState(true); // Fix state declaration
+  const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
   const UserRequests = async () => {
@@ -18,44 +18,21 @@ function Users_Requests() {
       });
 
       if (!response.ok) {
-        console.error("Response not OK");
-        console.log(response.json);
+        setUserRequests([]);
+        setLoading(false);
         return;
       }
 
       const res = await response.json();
-      console.log(res);
-      if (!Array.isArray(res.data)) {
-        console.error("Unexpected data format");
-        return;
+      if (Array.isArray(res.data)) {
+        setUserRequests(res.data);
+      } else {
+        setUserRequests([]);
       }
-
-      const requestsWithUserDetails = await Promise.all(
-        res.data.map(async (request) => {
-          const userDetailResponse = await fetch(`${baseUrl}/doctor/owner`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ userId: request.userId })
-          });
-
-          if (!userDetailResponse.ok) {
-            console.error("Failed to fetch user details");
-            return request;
-          }
-
-          const userDetail = await userDetailResponse.json();
-          return { ...request, userDetail: userDetail.user };
-        })
-      );
-
-      setUserRequests(requestsWithUserDetails);
     } catch (error) {
-      console.error("Internal server error:", error);
+      setUserRequests([]);
     } finally {
-      setLoading(false); // Ensure loading state is updated
+      setLoading(false);
     }
   };
 
@@ -66,34 +43,57 @@ function Users_Requests() {
   }, [token]);
 
   return (
-    <div>
+    <div className="min-h-[90vh] bg-gradient-to-br from-blue-50 via-gray-100 to-blue-100 py-8 px-2">
+      <h2 className="text-3xl font-extrabold text-center mb-8 text-blue-700 tracking-tight drop-shadow">
+        User Verification Requests
+      </h2>
       {loading ? (
-        <p className='w-full h-[90vh]  flex justify-center items-center'><img className='w-[10%] h-auto' src="../images/loadingIcon.gif" alt="" /></p>
+        <div className="flex justify-center items-center h-[60vh]">
+          <img className="w-16 h-16 animate-spin" src="../images/loadingIcon.gif" alt="Loading..." />
+        </div>
       ) : userRequests.length > 0 ? (
-        userRequests.map((request, idx) => (
-          <div key={idx} className='bg-white p-4 mb-4 shadow-lg rounded-lg flex'>
-            <div className='w-2/3 p-4'>
-              <h3 className='text-xl font-bold mb-2'>{request.queryType}</h3>
-              <p className='text-gray-700 mb-2'>{request.reqDescription}</p>
-              <p className='text-sm cursor-pointer text-gray-500 underline mb-4'>
-                Posted by: {request.userDetail.fullname} <br /> {request.userDetail.email}
-              </p>
-              <div className='flex justify-between items-center'>
-                <Link to={`/viewuser/${request.userDetail._id}`} className='text-blue-500 hover:underline'>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {userRequests.map((request) => (
+            <div
+              key={request._id}
+              className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col border border-blue-100 group"
+            >
+              <div className="flex flex-col gap-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-blue-700">About:</span>
+                  <span className="text-gray-800">{request.about}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-blue-700">Message:</span>
+                  <span className="text-gray-800">{request.message}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-blue-700">Status:</span>
+                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${request.status === "pending" ? "bg-yellow-200 text-yellow-800" : "bg-green-200 text-green-800"}`}>
+                    {request.status}
+                  </span>
+                </div>
+                <div className="text-gray-500 text-xs">
+                  Requested At: {new Date(request.createdAt).toLocaleString()}
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-auto">
+                <Link
+                  to={`/viewuser/${request.userId}`}
+                  className="text-blue-600 hover:text-blue-900 underline font-semibold transition-colors"
+                >
                   View User Analytics
                 </Link>
-                <button
-                  onClick={() => handleIgnore(request._id)}
-                  className='bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600'
-                >
-                  Ignore
-                </button>
+                {/* Add more actions here if needed */}
               </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       ) : (
-        <p>No user requests available.</p>
+        <div className="flex flex-col items-center justify-center h-[60vh]">
+          <img src="../../../images/Notfound.png" alt="No requests" className="w-32 h-32 mb-4 opacity-80" />
+          <span className="text-lg text-gray-500">No user requests available.</span>
+        </div>
       )}
     </div>
   );

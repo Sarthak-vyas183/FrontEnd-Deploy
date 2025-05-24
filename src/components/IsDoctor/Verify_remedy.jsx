@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/useAuth';
-const baseUrl = import.meta.env.VITE_API_BASE_URL; 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Verify_remedy() {
   const { token } = useAuth();
   const [verifiedRem, setVerifiedRem] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper to get image src (if needed)
+  // Helper to get image src
+  const getImageSrc = (img) => img || "../../../images/Notfound.png";
 
   // Fetch all unverified remedies
   const unVerifyedRemedy = async () => {
@@ -26,7 +27,7 @@ function Verify_remedy() {
       } else {
         setVerifiedRem([]);
       }
-    } catch (error) {
+    } catch {
       setVerifiedRem([]);
     }
     setLoading(false);
@@ -37,7 +38,7 @@ function Verify_remedy() {
     // eslint-disable-next-line
   }, []);
 
-  const handleVerify = async (remedyId, userId) => {
+  const handleVerify = async (remedyId) => {
     try {
       const response = await fetch(`${baseUrl}p/verifyRemedy/${remedyId}`, {
         method: "POST",
@@ -45,7 +46,6 @@ function Verify_remedy() {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const data = await response.json();
       if (!response.ok || !data.success) {
         console.log("Failed to verify remedy");
@@ -112,7 +112,7 @@ function Verify_remedy() {
                         Read More
                       </Link>
                       <button
-                        onClick={() => handleVerify(remedy._id, remedy.userId)}
+                        onClick={() => handleVerify(remedy._id)}
                         className="bg-gradient-to-r from-green-400 to-green-600 text-white py-1.5 px-5 rounded-lg shadow hover:from-green-500 hover:to-green-700 font-bold transition-all duration-200"
                       >
                         Verify
