@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import profile from "../../assets/profile.jpg";
 gsap.registerPlugin(ScrollTrigger);
 
 function About() {
+  const founderRef = useRef(null);
+
   useEffect(() => {
     // Select the scrollable element (if not using the body)
     const scroller = document.querySelector(".main-scroll-container");
@@ -37,18 +39,22 @@ function About() {
     });
 
     // Animation for the founder images and text
-    gsap.from(".founder", {
-      opacity: 0,
-      y: 50,
-      duration: 1,
-      ease: "power1.out",
-      stagger: 0.3,
-      scrollTrigger: {
-        trigger: ".founder",
-        start: "top 80%",
-        scroller: scroller || null,
-      },
-    });
+    // Fix: Animate on mount if in viewport, not only on scroll
+    if (founderRef.current) {
+      gsap.from(founderRef.current, {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        ease: "power1.out",
+        stagger: 0.3,
+        scrollTrigger: {
+          trigger: founderRef.current,
+          start: "top 90%",
+          scroller: scroller || null,
+          toggleActions: "play none none none",
+        },
+      });
+    }
   }, []);
 
   return (
@@ -100,7 +106,10 @@ function About() {
         <h1 className="text-3xl font-bold text-center text-green-800 mb-6 tracking-wide drop-shadow">
           Founders
         </h1>
-        <div className="flex flex-wrap justify-center items-center gap-10">
+        <div
+          className="flex flex-wrap justify-center items-center gap-10"
+          ref={founderRef}
+        >
           <div className="flex flex-col items-center founder bg-white bg-opacity-95 rounded-2xl shadow-xl p-8 transition transform hover:scale-105 hover:shadow-2xl duration-300">
             <img
               className="rounded-full w-36 h-36 border-4 border-green-400 shadow-md object-cover"

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
 function Home() {
@@ -29,45 +28,53 @@ function Home() {
   return (
     <section>
       <div
-        className="w-[100vw] h-[100vh]"
+        className="w-[100vw] h-[100vh] relative"
         style={{
           backgroundImage: "url(../../../images/about.png)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          rotate: "360deg",
         }}
       >
-        <div className="w-full h-full bg-black bg-opacity-60">
+        <div className="w-full h-full bg-gradient-to-br from-black/70 via-emerald-900/60 to-blue-900/60 flex flex-col justify-center items-center">
           <section className="left w-full md:w-[50%] h-full flex flex-col justify-center items-center">
-            <div className="w-full px-8 md:px-16">
-              <p className="text-green-400 bg-gray-700 bg-opacity-80 rounded-md p-2 text-2xl md:text-5xl">
-                Natural Herbal <br />
+            <div className="w-full px-8 md:px-16 mt-10 md:mt-0">
+              <p className="text-green-300 bg-gray-800 bg-opacity-70 rounded-xl p-4 text-3xl md:text-5xl font-extrabold shadow-lg tracking-tight animate-fade-in-down">
+                🌱 Natural Herbal <br />
                 Remedies
               </p>
             </div>
-
             <div className="w-full px-8 md:px-16 mt-4 md:mt-0">
-              <h1 className="text-white text-3xl md:text-4xl font-bold">
-                100% <br /> Organic
+              <h1 className="text-white text-4xl md:text-5xl font-black drop-shadow-lg animate-fade-in-up">
+                100% <span className="text-emerald-300">Organic</span>
               </h1>
             </div>
-            <br />
-            <br />
-            <div className="w-full flex px-8 md:px-16">
-              <div className="w-[90%] rounded-sm py-2 bg-opacity-60 bg-gray-600 flex gap-2">
-                <span className="w-1 h-full bg-red-500 rounded-sm"></span>
-                <p className="text-white w-[80%] text-sm md:text-base">
-                  Rural remedies epitomize a harmonious blend of nature's wisdom
-                  and human resilience, providing holistic healing solutions
-                  rooted in centuries-old knowledge. They celebrate the enduring
-                  efficacy of traditional practices, showcasing a sustainable
-                  approach to wellness deeply intertwined with community
-                  strength.
+            <div className="w-full flex px-8 md:px-16 mt-6">
+              <div className="w-[90%] rounded-lg py-4 bg-opacity-70 bg-gray-700 flex gap-3 shadow-lg">
+                <span className="w-1 h-full bg-emerald-400 rounded-sm"></span>
+                <p className="text-white w-[80%] text-base md:text-lg leading-relaxed">
+                  Rural remedies epitomize a harmonious blend of nature's wisdom and
+                  human resilience, providing holistic healing solutions rooted in
+                  centuries-old knowledge. They celebrate the enduring efficacy of
+                  traditional practices, showcasing a sustainable approach to wellness
+                  deeply intertwined with community strength.
                 </p>
               </div>
             </div>
+            <div className="flex gap-4 mt-8">
+              <button className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-200">
+                Explore Remedies
+              </button>
+              <button className="bg-white text-emerald-700 px-6 py-2 rounded-lg font-semibold shadow hover:bg-emerald-50 hover:text-emerald-900 transition-colors duration-200">
+                Learn More
+              </button>
+            </div>
           </section>
         </div>
+        <img
+          src="../../../images/leaficon.png"
+          alt="Leaf"
+          className="absolute bottom-8 right-8 w-24 md:w-40 animate-bounce-slow opacity-70 pointer-events-none"
+        />
       </div>
 
       <div id="part2" className="w-[100vw] h-auto bg-green-500">
@@ -151,7 +158,7 @@ function Home() {
 
           <div
             id="part2Right"
-            className="h-full w-full md:w-1/2 flex justify-center items-center hidden md:flex"
+            className="h-full w-full md:w-1/2 flex justify-center items-center  md:flex"
           >
             <img
               className="w-[75%] h-auto"
@@ -161,6 +168,38 @@ function Home() {
           </div>
         </div>
       </div>
+      <style>
+        {`
+          .animate-fade-in-down {
+            animation: fadeInDown 1s ease;
+          }
+          .animate-fade-in-up {
+            animation: fadeInUp 1s ease;
+          }
+          .animate-bounce-slow {
+            animation: bounce 2.5s infinite;
+          }
+          .animate-spin-slow {
+            animation: spin 6s linear infinite;
+          }
+          @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-15px);}
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+          }
+        `}
+      </style>
     </section>
   );
 }

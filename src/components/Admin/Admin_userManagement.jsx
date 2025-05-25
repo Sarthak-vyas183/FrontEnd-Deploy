@@ -50,7 +50,7 @@ function Admin_userManagement() {
 
   return (
     <div style={{ padding: 24, background: '#f9f9f9', minHeight: '100vh' }}>
-      <h1 style={{ marginBottom: 24, color: '#333', fontWeight: 700 }}>Admin User Management</h1>
+      <h1 style={{ marginBottom: 24, color: '#2563eb', fontWeight: 800, fontSize: 28, letterSpacing: 1 }}>Admin User Management</h1>
       {loading && <p>Loading users...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!loading && !error && (

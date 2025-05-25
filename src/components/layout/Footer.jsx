@@ -6,15 +6,15 @@ import { FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
 function Footer() {
   const [darkMode, setDarkmode] = useState(false)
   return (
-    <section className={`w-full h-auto flex flex-col justify-center items-center ${darkMode ? "text-white" : 'bg-white text-black'}  pb-8`}>
+    <section className={`w-full h-auto flex flex-col justify-center items-center bg-gradient-to-t from-blue-50 via-emerald-50 to-white pb-8`}>
       <div className="w-[95%] h-full">
-        <header className={`w-full h-auto flex flex-col md:flex-row ${darkMode ? 'bg-[#0C0C0C] border-white' : 'bg-[#FFFDFC] text-black border-black'} border-y-[1px]  pb-4`}>
+        <header className="w-full h-auto flex flex-col md:flex-row bg-white border-y-[1px] border-emerald-200 pb-4">
           <div className="w-full md:w-[30%] h-auto flex flex-col py-8 px-4">
             <span className="flex flex-col items-center">
-              <img className="w-16 h-16" src={Logo} alt="" />
-              <p className="text-center">Let Connect with our Socials</p>
+              <img className="w-16 h-16" src={Logo} alt="Logo" />
+              <p className="text-center text-emerald-700 font-semibold">Let’s Connect with our Socials</p>
             </span>
-            <span className="flex justify-center gap-2 cursor-pointer mt-2">
+            <span className="flex justify-center gap-3 cursor-pointer mt-2 text-emerald-600 text-xl">
               <FaInstagram />
               <FaFacebook />
               <FaTwitter />
@@ -66,7 +66,7 @@ function Footer() {
         </header>
 
         <div className="w-full h-auto flex justify-center pt-4">
-          <span className="text-center">
+          <span className="text-center text-emerald-700">
             <h1 className="text-sm">Copyright © 2024 HomeRemedy.in</h1>
             <p className="text-xs">All Rights Reserved.</p>
           </span>

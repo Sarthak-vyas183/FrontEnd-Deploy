@@ -12,8 +12,7 @@ function User() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
- 
-  
+
   if (!isLoggedin) {
     return <Navigate to="/" />;
   }
@@ -24,8 +23,8 @@ function User() {
     setExplore({ hide: explore.hide === "hidden" ? "flex" : "hidden" });
   };
 
-  useEffect(() => { 
-    if(screenSize.width < 500) {
+  useEffect(() => {
+    if (screenSize.width < 500) {
       if (explore.hide === "flex") {
         const elements = document.querySelectorAll(".sidebar-item");
         gsap.fromTo(
@@ -35,8 +34,7 @@ function User() {
         );
       }
     }
-   
-  }, [explore.hide]);
+  }, [explore.hide, screenSize.width]);
 
   return (
     <>
@@ -44,7 +42,7 @@ function User() {
         onClick={toggleExplore}
         className="max-sm:flex gap-3 px-2 font-semibold items-center w-full h-[7vh] mt-[10vh] text-black"
       >
-        {explore.hide == "hidden" ? (
+        {explore.hide === "hidden" ? (
           <>
             <i className="ri-menu-line text-4xl"></i>
             <p className="text-2xl">Explore</p>
@@ -57,70 +55,90 @@ function User() {
         )}
       </div>
 
-      <div className="flex fixed top-[10vh] max-sm:top-[17vh] left-0 w-[100vw] h-[90vh]">
+      <div className="flex fixed top-[10vh] max-sm:top-[17vh] left-0 w-[100vw] h-[90vh] bg-gradient-to-br from-emerald-50 via-blue-50 to-blue-100">
         {/* Sidebar */}
         <div
-          className={`w-[20vw] max-sm:w-[25vw] max-sm:relative max-sm:${explore.hide} bg-gray-900 p-4 max-sm:p-0 max-sm:pt-4 flex max-sm:items-center flex-col space-y-6 max-sm:space-y-2 border-r-2 border-gray-700`}
+          className={`w-[20vw] max-sm:w-[25vw] max-sm:relative max-sm:${explore.hide} bg-gradient-to-b from-emerald-800 via-blue-800 to-blue-700 p-4 max-sm:p-0 max-sm:pt-4 flex max-sm:items-center flex-col space-y-6 max-sm:space-y-2 border-r-2 border-emerald-400 shadow-2xl`}
         >
-          {/* Sidebar NavLinks */}
+          <div className="flex flex-col items-center mb-6">
+            <i className="ri-user-3-fill text-5xl text-white mb-2 drop-shadow-lg"></i>
+            <span className="text-lg font-bold text-white tracking-wide">
+              User Panel
+            </span>
+          </div>
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center max-sm:justify-center gap-1 max-sm:gap-0 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-2 text-lg font-bold p-2 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg"
+                  : "text-blue-100 hover:bg-blue-800 hover:text-white"
+              }`
             }
             to="/user/profile"
           >
-            <i className="ri-profile-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">&nbsp;&nbsp;Profile&nbsp;</p>
+            <i className="ri-profile-line text-2xl"></i>
+            <span>Profile</span>
           </NavLink>
-
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-2 text-lg font-bold p-2 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-lg"
+                  : "text-blue-100 hover:bg-green-700 hover:text-white"
+              }`
             }
             to="/user/create"
           >
-            <i className="ri-quill-pen-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Create Remedy</p>
+            <i className="ri-quill-pen-line text-2xl"></i>
+            <span>Create Remedy</span>
           </NavLink>
-
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-2 text-lg font-bold p-2 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg"
+                  : "text-blue-100 hover:bg-blue-800 hover:text-white"
+              }`
             }
             to="/user/myremedy"
           >
-            <i className="ri-inbox-archive-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">My Remedies</p>
+            <i className="ri-inbox-archive-fill text-2xl"></i>
+            <span>My Remedies</span>
           </NavLink>
-
-         
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-2 text-lg font-bold p-2 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg"
+                  : "text-blue-100 hover:bg-yellow-600 hover:text-white"
+              }`
             }
             to="/user/contact"
           >
-            <i className="ri-checkbox-circle-line max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Contact</p>
+            <i className="ri-checkbox-circle-line text-2xl"></i>
+            <span>Contact</span>
           </NavLink>
-          
           <NavLink
             onClick={toggleExplore}
             className={({ isActive }) =>
-              `sidebar-item flex max-sm:flex-col rounded-lg max-sm:rounded-none items-center gap-1 text-lg font-bold p-2 text-white ${isActive ? "bg-blue-600" : "hover:bg-gray-700"}`
+              `sidebar-item flex items-center gap-2 text-lg font-bold p-2 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-purple-400 to-purple-700 text-white shadow-lg"
+                  : "text-blue-100 hover:bg-purple-700 hover:text-white"
+              }`
             }
             to="/user/bookmarks"
           >
-            <i className="ri-save-fill max-sm:text-3xl"></i>
-            <p className="max-sm:text-sm">Saved</p>
+            <i className="ri-save-fill text-2xl"></i>
+            <span>Saved</span>
           </NavLink>
         </div>
         {/* Main Content */}
-        <div className="w-[80vw] max-sm:w-[100vw] bg-gray-100 text-black overflow-y-scroll">
+        <div className="w-[80vw] max-sm:w-[100vw] bg-gray-100 text-black overflow-y-scroll rounded-l-3xl shadow-inner">
           <Outlet />
         </div>
       </div>
