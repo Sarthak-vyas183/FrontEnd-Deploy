@@ -30,6 +30,8 @@ function Profile() {
     user?.preferredLanguage || ""
   );
   const [avatar, setAvatar] = useState(user?.avatar || defaultavatar);
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [doctorMessage, setDoctorMessage] = useState(""); // Add this line
 
   useEffect(() => {
     if (user && user.avatar) {
@@ -142,10 +144,11 @@ function Profile() {
   const handleReqToBeDoctor = async () => {
     try {
       const formData = new FormData();
-      formData.append("RMP_No", RMP_NO);
-      formData.append("RMP_img", RMP_img);
+      formData.append("RMP_NO", RMP_NO);
+      formData.append("RMP_Img", RMP_img);
+      formData.append("message", doctorMessage);
 
-      const response = await fetch(`${baseUrl}/auth/become_doctor`, {
+      const response = await fetch(`${baseUrl}user/becomeProfessional`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -466,7 +469,7 @@ function Profile() {
               Verify Yourself
             </h2>
             <p className="text-gray-600 mb-4">
-              Please Enter Certificate No. and Upload Certificate
+              Please Enter Certificate No., Upload Certificate, and add a message for admin
             </p>
             <input
               type="text"
@@ -474,13 +477,21 @@ function Profile() {
               onChange={(e) => setRMP_NO(e.target.value)}
               className="w-full border rounded p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
               required
+              placeholder="Certificate No."
             />
             <input
               type="file"
               name="RMPCertificate"
               onChange={(e) => setRMP_img(e.target.files[0])}
-              className="w-full border rounded p-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full border rounded p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
               required
+            />
+            <textarea
+              value={doctorMessage}
+              onChange={(e) => setDoctorMessage(e.target.value)}
+              className="w-full border rounded p-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              placeholder="Message to admin (optional)"
+              rows={3}
             />
             <div className="flex justify-between">
               <button

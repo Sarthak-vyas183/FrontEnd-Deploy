@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../Store/useAuth";
 import { toast } from "react-toastify";
@@ -15,30 +15,31 @@ function VerificationReq() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState("");
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`${baseUrl}admin/getAllReq`, {
-          method: "POST",
-          headers: {
-            Authorization: token,
-          },
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setRequests(data.data || []);
-        } else {
-          setError(data.msg || "Failed to fetch requests");
-        }
-      } catch (err) {
-        setError("Network error");
+  const fetchRequests = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${baseUrl}admin/getAllReq`, {
+        method: "POST",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setRequests(data.data || []);
+      } else {
+        setError(data.msg || "Failed to fetch requests");
       }
-      setLoading(false);
-    };
-    fetchRequests();
+    } catch (err) {
+      setError("Network error");
+    }
+    setLoading(false);
   }, [token]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   // Modal open handler
   const handleViewDocument = (imgUrl) => {
@@ -57,11 +58,30 @@ function VerificationReq() {
     window.open(modalImg, "_blank", "noopener,noreferrer");
   };
 
-  // Accept/Decline handlers (UI only)
-  const handleAccept = (id) => {
-    toast.success("Accepted (UI only)");
-    // ...API call here if needed...
-  };
+ const handleAccept =  useCallback(async (id) => {
+    try {
+      const response = await fetch(`${baseUrl}admin/getVerify`, {
+        method: "POST",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: id }),
+      });
+      const data = await response.json();
+      if (response.ok && data.statusCode === 200) {
+        toast.success(data.msg || "User's professional status toggled successfully");
+        // Optionally refresh requests list after accept
+        setRequests((prev) => prev.filter((req) => req._id !== id));
+        fetchRequests();
+      } else {
+        toast.error(data.msg || "Failed to accept request");
+      }
+    } catch (error) {
+      toast.error("Error accepting request");
+    }
+  }, [requests])
+  
   const handleDecline = (id) => {
     toast.error("Declined (UI only)");
     // ...API call here if needed...
@@ -204,7 +224,7 @@ function VerificationReq() {
                 </button>
                 <button
                   className="text-green-500 font-bold"
-                  onClick={() => handleAccept(req._id)}
+                  onClick={() => handleAccept(req.userId)}
                 >
                   Accept
                 </button>
