@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../Store/useAuth";
+import { FaSearch } from "react-icons/fa"; // Add at top
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,6 +14,9 @@ const Remedies = () => {
   const navigate = useNavigate();
   const { isRemedyLikedByUser, toggleRemedyLike } = useAuth();
   const [likedMap, setLikedMap] = useState({});
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     const fetchRemedies = async () => {
@@ -59,11 +63,120 @@ const Remedies = () => {
     }
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+    setSearching(true);
+    try {
+      const response = await fetch(`${baseUrl}remedy/search?q=${encodeURIComponent(search)}`);
+      const res = await response.json();
+      setSearchResults(res.data || []);
+    } catch (error) {
+      toast.error("Search failed.");
+      setSearchResults([]);
+    }
+    setSearching(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-50 to-blue-100 pt-[10vh] pb-10">
       <h1 className="text-5xl font-extrabold text-center mb-10 text-emerald-700 drop-shadow-lg tracking-tight">
         🌿 Explore Home Remedies
       </h1>
+      {/* Search Bar */}
+      <form
+        onSubmit={handleSearch}
+        className="flex justify-center items-center mb-8 gap-2"
+      >
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search remedies by title, description, or ailment..."
+          className="w-full max-w-md px-4 py-2 rounded-l-lg border border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        />
+        <button
+          type="submit"
+          className="bg-emerald-600 text-white px-4 py-2 rounded-r-lg hover:bg-emerald-700 transition"
+          disabled={searching}
+        >
+          <FaSearch />
+        </button>
+      </form>
+      {/* Search Results */}
+      {searching ? (
+        <div className="flex justify-center items-center h-32">
+          <img src="../images/loadingIcon.gif" alt="Searching..." className="w-10 h-10 animate-spin" />
+        </div>
+      ) : search && (
+        <div>
+          <h2 className="text-xl font-bold text-emerald-700 mb-4 text-center">
+            Search Results for "{search}"
+          </h2>
+          {searchResults.length === 0 ? (
+            <div className="text-center text-gray-500 mb-8">No remedies found.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-6 mb-10">
+              {searchResults.map((remedy) => (
+                <div
+                  key={remedy._id}
+                  className="remedy-card bg-white rounded-3xl shadow-xl hover:shadow-2xl overflow-hidden transform transition-transform hover:scale-105 border border-emerald-100 group flex flex-col"
+                >
+                  <div
+                    className="w-full h-56 bg-cover bg-center flex justify-end p-3 relative"
+                    style={{
+                      backgroundImage: `url(${remedy.image || "../../../images/Notfound.png"})`,
+                    }}
+                  >
+                    <span className="absolute top-3 left-3 bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold shadow">
+                      {remedy.ailments?.[0] || "Remedy"}
+                    </span>
+                    {remedy.isVerified ? (
+                      <img
+                        src="../../../images/verified-icon.png"
+                        className="w-10 h-10 bg-emerald-500 rounded-full shadow-md border-2 border-white"
+                        alt="Verified"
+                      />
+                    ) : (
+                      <img
+                        src="../../../images/danger.png"
+                        className="w-10 h-10 bg-red-500 rounded-full shadow-md border-2 border-white"
+                        alt="Not Verified"
+                      />
+                    )}
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <h2 className="text-2xl font-bold text-emerald-800 group-hover:text-emerald-900 transition-colors duration-200">
+                          {remedy.title}
+                        </h2>
+                      </div>
+                      <p className="text-gray-600 mb-4 line-clamp-3">{remedy.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {remedy.ailments?.slice(0, 3).map((ailment, idx) => (
+                          <span key={idx} className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">
+                            {ailment}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-4">
+                      <Link
+                        to={`/remedy/${remedy._id}`}
+                        className="p-3 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-lg text-white font-semibold shadow-md hover:from-emerald-600 hover:to-emerald-800 hover:shadow-lg transition-all duration-300"
+                      >
+                        Read more
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {/* ...existing remedies list... */}
       {loading ? (
         <div className="flex justify-center items-center h-[60vh]">
           <img src="../images/loadingIcon.gif" alt="Loading..." className="w-20 h-20 animate-spin" />

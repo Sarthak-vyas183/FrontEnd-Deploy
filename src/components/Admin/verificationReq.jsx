@@ -41,13 +41,12 @@ function VerificationReq() {
     fetchRequests();
   }, [fetchRequests]);
 
-  // Modal open handler
   const handleViewDocument = (imgUrl) => {
     setModalImg(imgUrl);
     setModalOpen(true);
   };
 
-  // Modal close handler
+  
   const handleCloseModal = () => {
     setModalOpen(false);
     setModalImg("");
