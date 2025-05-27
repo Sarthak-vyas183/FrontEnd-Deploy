@@ -1,13 +1,55 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import { toast } from "react-toastify";
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    fullname: "",
+    email: "",
+    contact: "",
+    message: ""
+});
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Optionally reset form fields here
+    setLoading(true);
+    setError("");
+    setSubmitted(false);
+    try {
+      const response = await fetch(`${baseUrl}user/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+      const data = await response.json();
+      if (response.ok && data.msg === "contact message Sent") {
+        setSubmitted(true);
+        setForm({
+          fullname: "",
+          email: "",
+          contact: "",
+          message: ""
+        });
+        toast.success("Your message has been sent successfully!");
+      } else {
+        setError(data.msg || "Failed to send message.");
+      }
+    } catch (err) {
+      setError("Failed to send message.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -28,6 +70,9 @@ function Contact() {
             </span>
             <input
               type="text"
+              name="fullname"
+              value={form.fullname}
+              onChange={handleChange}
               placeholder="Full Name"
               className="w-full pl-10 pr-4 py-3 bg-green-50 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
               required
@@ -42,6 +87,9 @@ function Contact() {
               </span>
               <input
                 type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 placeholder="Email"
                 className="w-full pl-10 pr-4 py-3 bg-green-50 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
                 required
@@ -55,8 +103,12 @@ function Contact() {
               </span>
               <input
                 type="text"
+                name="contact"
+                value={form.contact}
+                onChange={handleChange}
                 placeholder="Phone"
                 className="w-full pl-10 pr-4 py-3 bg-green-50 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                required
               />
             </div>
           </div>
@@ -67,6 +119,9 @@ function Contact() {
               </svg>
             </span>
             <textarea
+              name="message"
+              value={form.message}
+              onChange={handleChange}
               placeholder="Type your message here"
               rows="4"
               className="w-full pl-10 pr-4 py-3 bg-green-50 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 transition resize-none"
@@ -76,13 +131,19 @@ function Contact() {
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-green-600 to-green-400 text-white font-semibold rounded-xl shadow-md hover:from-green-700 hover:to-green-500 transition-all duration-200 transform hover:-translate-y-1"
+            disabled={loading}
           >
-            Send Message
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
         {submitted && (
           <p className="mt-6 text-green-600 text-center font-medium animate-fade-in">
             Thanks for submitting!
+          </p>
+        )}
+        {error && (
+          <p className="mt-6 text-red-600 text-center font-medium animate-fade-in">
+            {error}
           </p>
         )}
       </div>
